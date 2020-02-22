@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -46,8 +47,21 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
 // TODO Auto-generated method stub
-                txtDisplay.setText("Response => " + response.toString());
-              //  findViewById(R.id.progressBar1).setVisibility(View.GONE);
+                try {
+                    /*JSONArray jsonArray = response.getJSONArray("@context");
+
+                    for(int i = 0; i<jsonArray.length(); i++){
+                        JSONObject context = jsonArray.getJSONObject(i);
+
+                    }
+                        */
+                    String s = response.getString("id");
+                    txtDisplay.setText(s);
+                    //  findViewById(R.id.progressBar1).setVisibility(View.GONE);
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
