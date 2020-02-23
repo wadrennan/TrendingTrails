@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,17 +18,19 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
     private List<String> dates;
     private List<String> maxTemps;
     private List<String> lowTemps;
+    private int descriptors[];
     private LayoutInflater mInflater;
     private ViewPager2 viewPager2;
 
 
     private int[] colorArray = new int[]{android.R.color.black, android.R.color.holo_blue_dark, android.R.color.holo_green_dark, android.R.color.holo_red_dark};
 
-    ViewPagerAdapter(Context context, List<String> date, List<String> highs, List<String> lows, ViewPager2 viewPager2) {
+    ViewPagerAdapter(Context context, List<String> date, List<String> highs, List<String> lows, int descriptor[], ViewPager2 viewPager2) {
         this.mInflater = LayoutInflater.from(context);
         this.dates = date;
         this.maxTemps = highs;
         this.lowTemps = lows;
+        this.descriptors = descriptor;
         this.viewPager2 = viewPager2;
     }
 
@@ -46,6 +49,22 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
         holder.maxTempView.setText(highTemp);
         String lowTemp = lowTemps.get(position);
         holder.lowTempView.setText(lowTemp);
+        if(descriptors[position]<522){
+            holder.iconView.setImageResource(R.drawable.rain);
+        }
+        else if(descriptors[position] < 623 ){
+            holder.iconView.setImageResource(R.drawable.snow);
+        }
+        else if(descriptors[position] >751 && descriptors[position] < 801){
+            holder.iconView.setImageResource(R.drawable.sunny);
+        }
+        else if(descriptors[position]  < 803){
+            holder.iconView.setImageResource(R.drawable.partly_cloudy);
+        }
+        else{
+            holder.iconView.setImageResource(R.drawable.cloudy);
+        }
+
         //holder.relativeLayout.setBackgroundResource(colorArray[position]);
     }
 
@@ -57,6 +76,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView myDateView, maxTempView, lowTempView;
+        ImageView iconView;
         ConstraintLayout constraintLayout;
         //Button button;
 
@@ -65,6 +85,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
             myDateView = itemView.findViewById(R.id.date);
             maxTempView = itemView.findViewById(R.id.max_temp_data);
             lowTempView = itemView.findViewById(R.id.low_temp_data);
+            iconView = itemView.findViewById(R.id.icon);
             constraintLayout = itemView.findViewById(R.id.container);
             /*button = itemView.findViewById(R.id.btnToggle);
 

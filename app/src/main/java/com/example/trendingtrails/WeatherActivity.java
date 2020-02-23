@@ -27,6 +27,7 @@ public class WeatherActivity extends AppCompatActivity {
     List<String> dates;
     List<String> maxTemps;
     List<String> lowTemps;
+    int descriptors [];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class WeatherActivity extends AppCompatActivity {
         dates= new ArrayList<>();
         maxTemps=new ArrayList<>();
         lowTemps = new ArrayList<>();
+        descriptors = new int[8];
        /* list = new ArrayList<>();
         list.add("First Screen");
         list.add("Second Screen");
@@ -62,13 +64,16 @@ public class WeatherActivity extends AppCompatActivity {
                         maxTemps.add(finalresult);
                         finalresult = String.valueOf(context.getDouble("low_temp"));
                         lowTemps.add(finalresult);
+                        JSONObject desc = context.getJSONObject("weather");
+                        int d = desc.getInt("code");
+                        descriptors[i] = (d);
                         Log.d("LIST","Element Added");
                         //txtDisplay.append(finalresult + " C\n");
                     }
 
 
                     //  findViewById(R.id.progressBar1).setVisibility(View.GONE);
-                    setViewPager2Adapter(dates, maxTemps, lowTemps);
+                    setViewPager2Adapter(dates, maxTemps, lowTemps, descriptors);
                 }
                 catch (JSONException e){
                     e.printStackTrace();
@@ -84,8 +89,8 @@ public class WeatherActivity extends AppCompatActivity {
 
 
     }
-    private void setViewPager2Adapter(List<String> dates, List<String> highs, List<String> lows){
-        viewPager2.setAdapter(new ViewPagerAdapter(this, dates, highs,lows, viewPager2));
+    private void setViewPager2Adapter(List<String> dates, List<String> highs, List<String> lows, int descriptor []){
+        viewPager2.setAdapter(new ViewPagerAdapter(this, dates, highs,lows, descriptor, viewPager2));
     }
 }
 

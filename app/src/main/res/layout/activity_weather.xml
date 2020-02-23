@@ -86,19 +86,19 @@
         app:layout_constraintStart_toEndOf="@+id/max_temp_data"
         app:layout_constraintTop_toBottomOf="@+id/low_temp" />
 
-    <TextView
-        android:id="@+id/current_temp"
+    <ImageView
+        android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
         android:layout_marginTop="81dp"
         android:layout_marginEnd="150dp"
         android:layout_marginBottom="408dp"
-        android:text="21"
-        android:textSize="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date" />
+        app:layout_constraintTop_toBottomOf="@+id/date"
+        app:srcCompat="@mipmap/ic_launcher"
+        tools:srcCompat="@mipmap/ic_launcher" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
