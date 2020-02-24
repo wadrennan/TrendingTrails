@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeatherActivity extends AppCompatActivity {
+public class WeatherActivity extends HomeActivity {
 
     ViewPager2 viewPager2;
     //List<String> list;
