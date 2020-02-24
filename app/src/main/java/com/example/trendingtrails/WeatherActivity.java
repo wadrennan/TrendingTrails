@@ -24,10 +24,11 @@ public class WeatherActivity extends AppCompatActivity {
 
     ViewPager2 viewPager2;
     //List<String> list;
-    List<String> dates;
-    List<String> maxTemps;
-    List<String> lowTemps;
+    private List<String> dates;
+    private List<String> maxTemps;
+    private List<String> lowTemps;
     int descriptors [];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
