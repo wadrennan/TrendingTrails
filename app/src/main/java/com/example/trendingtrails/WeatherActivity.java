@@ -28,12 +28,17 @@ public class WeatherActivity extends AppCompatActivity {
     private List<String> maxTemps;
     private List<String> lowTemps;
     int descriptors [];
+    //private Bundle b;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pager_main);
-
+        Bundle b = getIntent().getExtras();
+        String zip = "37027";
+        if(b!=null){
+             zip = b.getString("zip");
+        }
         viewPager2 = findViewById(R.id.viewPager2);
         dates= new ArrayList<>();
         maxTemps=new ArrayList<>();
@@ -47,7 +52,7 @@ public class WeatherActivity extends AppCompatActivity {
         */
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.weatherbit.io/v2.0/forecast/daily?city=Raleigh,NC&key=603e03f3bfb042fca8b3c593c3da5a6b&units=I";
+        String url = "https://api.weatherbit.io/v2.0/forecast/daily?postal_code="+zip+"&key=603e03f3bfb042fca8b3c593c3da5a6b&units=I";
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public synchronized void onResponse(JSONObject response) {
@@ -61,7 +66,7 @@ public class WeatherActivity extends AppCompatActivity {
                         //String finalresult = String.valueOf(context.getDouble("valid_date"));
                        // list.add(finalresult);
                         dates.add(finalresult);
-                        finalresult = String.valueOf(context.getDouble("max_temp"));
+                        finalresult = String.valueOf(context.getDouble("high_temp"));
                         maxTemps.add(finalresult);
                         finalresult = String.valueOf(context.getDouble("low_temp"));
                         lowTemps.add(finalresult);
