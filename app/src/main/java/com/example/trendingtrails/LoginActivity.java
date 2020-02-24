@@ -5,17 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
-    GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +33,14 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        mGoogleSignInClient  = GoogleSignIn.getClient(this, gso);
+        Constants.mGoogleSignInClient  = GoogleSignIn.getClient(this, gso);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
+        Constants.account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(Constants.account);
     }
 
     @Override
@@ -55,8 +54,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
-            GoogleSignInAccount account = task.getResult(ApiException.class);
-            updateUI(account);
+            Constants.account = task.getResult(ApiException.class);
+            EditText emailText = (EditText) findViewById(R.id.emailText);
+            updateUI(Constants.account);
         } catch (ApiException e){
             updateUI(null);
         }
@@ -64,16 +64,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(GoogleSignInAccount account) {
         if(account != null) {
-            setContentView(R.layout.activity_home);
+            Intent successfulIntent = new Intent(getBaseContext(), HomeActivity.class);
+            startActivity(successfulIntent);
+            finish();
         }
-        else{
-            Toast.makeText(getApplicationContext(), "Failed to login", Toast.LENGTH_LONG).show();
-        }
-
     }
 
     private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = Constants.mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1);
     }
 }
