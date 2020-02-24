@@ -53,13 +53,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void signOut() {
-        Constants.mGoogleSignInClient.signOut()
+        Account.mGoogleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Intent signoutIntent = new Intent(getBaseContext(), LoginActivity.class);
                         startActivity(signoutIntent);
-                        finish();
+                        finishAffinity();
                     }
                 });
     }

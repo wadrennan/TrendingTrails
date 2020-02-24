@@ -33,14 +33,14 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        Constants.mGoogleSignInClient  = GoogleSignIn.getClient(this, gso);
+        Account.mGoogleSignInClient  = GoogleSignIn.getClient(this, gso);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        Constants.account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(Constants.account);
+        Account.account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(Account.account);
     }
 
     @Override
@@ -54,9 +54,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
-            Constants.account = task.getResult(ApiException.class);
+            Account.account = task.getResult(ApiException.class);
             EditText emailText = (EditText) findViewById(R.id.emailText);
-            updateUI(Constants.account);
+            updateUI(Account.account);
         } catch (ApiException e){
             updateUI(null);
         }
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signIn() {
-        Intent signInIntent = Constants.mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = Account.mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1);
     }
 }
