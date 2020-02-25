@@ -21,13 +21,7 @@
         </activity>
         <activity android:name=".WeatherActivity"></activity>
         <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".SelectCityActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".SelectCityActivity"> </activity>
         <activity android:name=".LocationMenu"></activity>
     </application>
 
