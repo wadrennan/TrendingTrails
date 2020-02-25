@@ -1,13 +1,14 @@
 package com.example.trendingtrails;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.weatherButton:
-                        Intent weatherIntent = new Intent(getBaseContext(), WeatherActivity.class);
+                        Intent weatherIntent = new Intent(getBaseContext(), SelectCityActivity.class);
                         startActivity(weatherIntent);
                         break;
                 }
