@@ -35,8 +35,12 @@ public class WeatherActivity extends HomeActivity {
         setContentView(R.layout.view_pager_main);
         Bundle b = getIntent().getExtras();
         String zip = "37027";
+        double lat =0;
+        double lng = 0;
         if(b!=null){
-             zip = b.getString("zip");
+                zip = b.getString("zip");
+                lat = b.getDouble("lat");
+                lng = b.getDouble("lng");
         }
         viewPager2 = findViewById(R.id.viewPager2);
         dates= new ArrayList<>();
@@ -51,7 +55,15 @@ public class WeatherActivity extends HomeActivity {
         */
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.weatherbit.io/v2.0/forecast/daily?postal_code="+zip+"&key=603e03f3bfb042fca8b3c593c3da5a6b&units=I";
+        String url;
+        if(lat != 0){
+            System.out.println("lat lon");
+            url = "https://api.weatherbit.io/v2.0/forecast/daily?lat="+lat+"&lon="+lng+"&key=603e03f3bfb042fca8b3c593c3da5a6b&units=I";
+        }
+        else {
+            System.out.println("zip");
+            url = "https://api.weatherbit.io/v2.0/forecast/daily?postal_code=" + zip + "&key=603e03f3bfb042fca8b3c593c3da5a6b&units=I";
+        }
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public synchronized void onResponse(JSONObject response) {
