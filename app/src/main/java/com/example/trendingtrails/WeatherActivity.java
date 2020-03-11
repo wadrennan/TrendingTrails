@@ -29,7 +29,6 @@ public class WeatherActivity extends HomeActivity {
     private List<String> lowTemps;
     int descriptors [];
     //private Bundle b;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
