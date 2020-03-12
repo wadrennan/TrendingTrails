@@ -72,6 +72,17 @@ public class LocationsMenuActivity extends HomeActivity {
 
             }
         });
+        findViewById(R.id.add_location).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.add_location:
+                        Intent weatherIntent = new Intent(getBaseContext(), SelectCityActivity.class);
+                        startActivity(weatherIntent);
+                        break;
+                }
+            }
+        });
     }
 
 

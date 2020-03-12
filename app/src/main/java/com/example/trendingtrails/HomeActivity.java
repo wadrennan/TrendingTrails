@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.weatherButton:
-                        Intent weatherIntent = new Intent(getBaseContext(), SelectCityActivity.class);
+                        Intent weatherIntent = new Intent(getBaseContext(), LocationsMenuActivity.class);
                         startActivity(weatherIntent);
                         break;
                 }
