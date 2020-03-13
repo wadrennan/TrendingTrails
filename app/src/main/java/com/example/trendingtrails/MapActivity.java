@@ -13,13 +13,22 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends HomeActivity
         implements OnMapReadyCallback{
     private GoogleApiClient googleApiClient;
-    LocationTrack lt = new LocationTrack(this );
+    LocationTrack lt;
+    private double lat;
+    private double lon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_map);
+        checkLocationPermissions();
+        lt = new LocationTrack(this);
+        if (lt.canGetLocation()) {
+            System.out.println("Can get location");
+            lat = lt.getLatitude();
+            lon = lt.getLongitude();
+        }
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -41,8 +50,11 @@ public class MapActivity extends HomeActivity
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
-        double lat = lt.getLatitude();
-        double lon = lt.getLongitude();
+        System.out.println("Callback");
+        //double lat = lt.getLatitude();
+        //double lon = lt.getLongitude();
+        System.out.println(lat);
+        System.out.println(lon);
         LatLng sydney = new LatLng(lat, lon);
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker in Sydney"));

@@ -99,7 +99,7 @@ public class WeatherActivity extends HomeActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                //txtDisplay.setText("That didn't work!");
+                System.out.println(error);
             }
         });
         queue.add(jsObjRequest);
@@ -111,73 +111,6 @@ public class WeatherActivity extends HomeActivity {
     }
 }
 
-/*import android.os.Bundle;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
-
-public class WeatherActivity extends AppCompatActivity {
-    //private RequestQueue queue;
-    //private TextView myTextView;
-    //@Override
-    /*protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather);
-        final TextView myTextView = (TextView) findViewById(R.id.weatherData);
-       // Button B = findViewById(R.id.weather_button);
-        // initializing the queue object
-        queue = Volley.newRequestQueue(this);
-        findViewById(R.id.weather_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myTextView.setText("hello");
-                }
-            });
-        }
-    private TextView txtDisplay;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather);
-        //txtDisplay = (TextView) findViewById(R.id.weatherData);
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.weatherbit.io/v2.0/forecast/daily?city=Raleigh,NC&key=603e03f3bfb042fca8b3c593c3da5a6b";
-        /*JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-
-                    for(int i = 0; i<jsonArray.length(); i++){
-                        JSONObject context = jsonArray.getJSONObject(i);
-                        String finalresult = String.valueOf(context.getDouble("max_temp"));
-                        txtDisplay.append(finalresult + " C\n");
-                    }
-
-
-                    //  findViewById(R.id.progressBar1).setVisibility(View.GONE);
-                }
-                catch (JSONException e){
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                txtDisplay.setText("That didn't work!");
-            }
-        });
-        queue.add(jsObjRequest);
-
-    }
-
-}*/
 
 
 
