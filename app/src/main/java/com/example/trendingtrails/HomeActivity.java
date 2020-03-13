@@ -45,6 +45,17 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+        findViewById(R.id.mapButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.mapButton:
+                        Intent weatherIntent = new Intent(getBaseContext(), MapActivity.class);
+                        startActivity(weatherIntent);
+                        break;
+                }
+            }
+        });
     }
 
     @Override
