@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapActivity extends HomeActivity
         implements OnMapReadyCallback{
     private GoogleApiClient googleApiClient;
+    LocationTrack lt = new LocationTrack(this );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +41,9 @@ public class MapActivity extends HomeActivity
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
-
-        LatLng sydney = new LatLng(-33.852, 151.211);
+        double lat = lt.getLatitude();
+        double lon = lt.getLongitude();
+        LatLng sydney = new LatLng(lat, lon);
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
