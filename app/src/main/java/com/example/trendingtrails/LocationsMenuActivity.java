@@ -1,5 +1,7 @@
 package com.example.trendingtrails;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -34,7 +36,7 @@ public class LocationsMenuActivity extends HomeActivity {
                     double latitude = locationTrack.getLatitude();
                     Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LocationsMenuActivity.this, WeatherActivity.class);
-                    intent.putExtra("lat",latitude);
+                    intent.putExtra("lat", latitude);
                     intent.putExtra("lng", longitude);
                     startActivity(intent);
                     //Toast.makeText(getApplicationContext(), "Longitude:" + Double.toString(longitude) + "\nLatitude:" + Double.toString(latitude), Toast.LENGTH_SHORT).show();
@@ -63,6 +65,19 @@ public class LocationsMenuActivity extends HomeActivity {
     protected void onDestroy() {
         super.onDestroy();
         locationTrack.stopListener();
+    }
+
+    private class LocationReciever extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction().equals("GET_SIGNAL_STRENGTH")) {
+                int level = intent.getIntExtra("LEVEL_DATA", 0);
+
+                // Show it in GraphView
+            }
+
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.trendingtrails;
 
 import android.Manifest;
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
+import java.util.Map;
+
 /**
  * Location Tracking Service to get location in background. Use getLatitude and getLongitude to get coordinates
  */
@@ -24,7 +28,6 @@ import androidx.core.app.ActivityCompat;
 public class LocationTrack extends Service implements LocationListener {
 
     private final Context mContext;
-
 
     boolean checkGPS = false;
 
@@ -36,18 +39,20 @@ public class LocationTrack extends Service implements LocationListener {
     Location loc;
     double latitude;
     double longitude;
+    private final IBinder mBinder = new MyBinder();
+
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 5;
 
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0;
-
-
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
+    private static final long MIN_TIME_BW_UPDATES = 10 * 60 * 1;
     protected LocationManager locationManager;
 
     public LocationTrack(Context mContext) {
         this.mContext = mContext;
+        System.out.println(mContext);
         getLocation();
     }
+
 
     private Location getLocation() {
 
@@ -95,44 +100,11 @@ public class LocationTrack extends Service implements LocationListener {
 
 
                 }
-
-
-                /*if (checkNetwork) {
-
-
-                    if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                    }
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-
-                    if (locationManager != null) {
-                        loc = locationManager
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-                    }
-
-                    if (loc != null) {
-                        latitude = loc.getLatitude();
-                        longitude = loc.getLongitude();
-                    }
-                }*/
-
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return loc;
     }
 
@@ -199,14 +171,36 @@ public class LocationTrack extends Service implements LocationListener {
         }
     }
 
+    public class MyBinder extends Binder {
+        LocationTrack getService(){
+         return LocationTrack.this;
+        }
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        System.out.println("on Bind");
+        return mBinder;
+    }
+
+    public void onRebind(Intent intent) {
+        System.out.println("OnRebind");
+        super.onRebind(intent);
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        System.out.println(location.getLatitude());
+        System.out.println(location.getLongitude());
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        sendDataToActivity();
+    }
 
+    @Override
+    public boolean onUnbind(Intent intent) {
+        System.out.println("OnUnbind");
+        return true;
     }
 
     @Override
@@ -222,5 +216,17 @@ public class LocationTrack extends Service implements LocationListener {
     @Override
     public void onProviderDisabled(String s) {
 
+    }
+    private void sendDataToActivity()
+    {
+        Intent sendLevel = new Intent();
+
+       // Intent sendLevel = new Intent(getBaseContext(), MapActivity.class);
+        sendLevel.setAction("LocationData");
+        sendLevel.putExtra( "lat",latitude);
+        sendLevel.putExtra("lng", longitude);
+        mContext.sendBroadcast(sendLevel);
+
+       System.out.println("Send data to activity");
     }
 }

@@ -23,7 +23,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
+        <service android:name=".LocationTrack"></service>
         <activity android:name=".HomeActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -36,7 +36,8 @@
         <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".LocationsMenuActivity"></activity>
         <activity android:name=".SelectCityActivity"></activity>
-        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".MapActivity">
+        </activity>
     </application>
 
 </manifest>

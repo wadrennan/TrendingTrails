@@ -1,14 +1,24 @@
 package com.example.trendingtrails;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.location.LocationListener;
 import android.os.Bundle;
+import android.os.IBinder;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.example.trendingtrails.LocationTrack.MyBinder;
 
 public class MapActivity extends HomeActivity
         implements OnMapReadyCallback{
@@ -16,6 +26,10 @@ public class MapActivity extends HomeActivity
     LocationTrack lt;
     private double lat;
     private double lon;
+    private GoogleMap map;
+    LocationReciever broadReceiver;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +37,24 @@ public class MapActivity extends HomeActivity
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_map);
         checkLocationPermissions();
-        lt = new LocationTrack(this);
+        lt = new LocationTrack(MapActivity.this);
         if (lt.canGetLocation()) {
             System.out.println("Can get location");
             lat = lt.getLatitude();
             lon = lt.getLongitude();
         }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("LocationData");
+
+        broadReceiver = new LocationReciever();
+        registerReceiver(broadReceiver, intentFilter);
+
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
     }
 
@@ -55,10 +76,44 @@ public class MapActivity extends HomeActivity
         //double lon = lt.getLongitude();
         System.out.println(lat);
         System.out.println(lon);
+        map = googleMap;
         LatLng sydney = new LatLng(lat, lon);
         googleMap.addMarker(new MarkerOptions().position(sydney)
                 .title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.setMyLocationEnabled(true);
+
     }
+
+
+
+    protected void onDestroy() {
+        super.onDestroy();
+        lt.stopListener();
+    }
+    private void updateMap(GoogleMap googleMap){
+        System.out.println("Update Map");
+        LatLng sydney = new LatLng(lat, lon);
+        //googleMap.addMarker(new MarkerOptions().position(sydney)
+          //      .title("Marker in Sydney"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,10));
+    }
+    public class LocationReciever extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("In receive");
+            if(intent.getAction().equals("LocationData"))
+            {
+                System.out.println("Receiving Broadcast");
+                lat = intent.getDoubleExtra("lat",0);
+                lon = intent.getDoubleExtra("lng", 0);
+                updateMap(map);
+                // Show it in GraphView
+            }
+        }
+    }
+
+
 
 }
