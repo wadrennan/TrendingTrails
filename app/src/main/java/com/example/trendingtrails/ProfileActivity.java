@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.trendingtrails.Models.Account;
+import com.example.trendingtrails.Models.Global;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,7 +22,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileActivity extends HomeActivity {
+public class ProfileActivity extends BaseActivity {
     ArrayAdapter<String> dataAdapter;
     EditText nameText;
     Spinner spinner;
@@ -103,7 +103,7 @@ public class ProfileActivity extends HomeActivity {
         @Override
         protected void onPreExecute()
         {
-            email = Account.account.getEmail();
+            email = Global.accountInfo.personEmail;
             TextView emailText = findViewById(R.id.emailText);
             emailText.setText(email);
         }
@@ -127,7 +127,7 @@ public class ProfileActivity extends HomeActivity {
                     }
                     else
                     {
-                        String query = "Select * from [dbo].[Profile] where email= '" + Account.account.getEmail() + "' ";
+                        String query = "Select * from [dbo].[Profile] where email= '" + Global.accountInfo.personEmail + "' ";
                         Statement stmt = conn.createStatement();
                         ResultSet rs = stmt.executeQuery(query);
                         if(rs.next())
@@ -137,7 +137,7 @@ public class ProfileActivity extends HomeActivity {
                         }
                         else
                         {
-                            name = Account.account.getDisplayName();
+                            name = Global.accountInfo.personGivenName + " " + Global.accountInfo.personFamilyName;
                             exp = 0;
                             query = "INSERT INTO [dbo].[Profile] (email, name, experience) VALUES ('" + email + "', '" + name +"', 0) ";
                             rs = stmt.executeQuery(query);

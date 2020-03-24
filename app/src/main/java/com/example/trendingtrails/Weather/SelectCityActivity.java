@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.HomeActivity;
 import com.example.trendingtrails.R;
 
-public class SelectCityActivity extends HomeActivity {
+public class SelectCityActivity extends BaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

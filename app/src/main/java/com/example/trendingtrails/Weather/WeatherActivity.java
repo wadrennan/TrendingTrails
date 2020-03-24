@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.HomeActivity;
 import com.example.trendingtrails.R;
 
@@ -21,7 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeatherActivity extends HomeActivity {
+public class WeatherActivity extends BaseActivity {
 
     ViewPager2 viewPager2;
     //List<String> list;

@@ -6,7 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.trendingtrails.Models.Account;
+import com.example.trendingtrails.Models.AccountInfo;
+import com.example.trendingtrails.Models.Global;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -14,6 +15,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 public class LoginActivity extends AppCompatActivity {
+    private static GoogleSignInAccount account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +34,14 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-        Account.mGoogleSignInClient  = GoogleSignIn.getClient(this, gso);
+        Global.mGoogleSignInClient  = GoogleSignIn.getClient(this, gso);
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        Account.account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(Account.account);
+        account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
     }
 
     @Override
@@ -53,8 +55,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
-            Account.account = task.getResult(ApiException.class);
-            updateUI(Account.account);
+            account = task.getResult(ApiException.class);
+            updateUI(account);
         } catch (ApiException e){
             updateUI(null);
         }
@@ -62,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(GoogleSignInAccount account) {
         if(account != null) {
+            Global.accountInfo = new AccountInfo(account);
             Intent successfulIntent = new Intent(getBaseContext(), HomeActivity.class);
             startActivity(successfulIntent);
             finish();
@@ -69,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signIn() {
-        Intent signInIntent = Account.mGoogleSignInClient.getSignInIntent();
+        Intent signInIntent = Global.mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1);
     }
 }

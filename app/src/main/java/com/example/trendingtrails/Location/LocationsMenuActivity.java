@@ -8,13 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.HomeActivity;
 import com.example.trendingtrails.R;
 import com.example.trendingtrails.Weather.SelectCityActivity;
 import com.example.trendingtrails.Weather.WeatherActivity;
 
 
-public class LocationsMenuActivity extends HomeActivity {
+public class LocationsMenuActivity extends BaseActivity {
     //Location Tracking Service
     LocationTrack locationTrack;
 
@@ -68,7 +69,8 @@ public class LocationsMenuActivity extends HomeActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        locationTrack.stopListener();
+        if(locationTrack != null)
+            locationTrack.stopListener();
     }
 
     private class LocationReciever extends BroadcastReceiver {

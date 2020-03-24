@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.trendingtrails">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,14 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".BaseActivity"></activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
-        <!--
-             The API key for Google Maps-based APIs.
-        -->
+        <!--              The API key for Google Maps-based APIs. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -27,8 +27,9 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name=".Location.LocationTrack"></service>
-        <activity android:name=".HomeActivity"></activity>
+        <service android:name=".Location.LocationTrack" />
+
+        <activity android:name=".HomeActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,12 +37,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Weather.WeatherActivity"></activity>
-        <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".Location.LocationsMenuActivity"></activity>
-        <activity android:name=".Weather.SelectCityActivity"></activity>
-        <activity android:name=".Map.MapActivity">
-        </activity>
+        <activity android:name=".Weather.WeatherActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".Location.LocationsMenuActivity" />
+        <activity android:name=".Weather.SelectCityActivity" />
+        <activity android:name=".Map.MapActivity"></activity>
     </application>
 
 </manifest>

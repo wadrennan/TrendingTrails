@@ -8,27 +8,27 @@
 
     <ImageButton
         android:id="@+id/weatherButton"
-        android:layout_width="120dp"
-        android:layout_height="116dp"
+        android:layout_width="118dp"
+        android:layout_height="112dp"
         android:background="@drawable/roundicon"
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.762"
+        app:layout_constraintHorizontal_bias="0.848"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142"
+        app:layout_constraintVertical_bias="0.328"
         app:srcCompat="@drawable/weathericon" />
 
     <TextView
         android:id="@+id/weatherCaption"
-        android:layout_width="123dp"
-        android:layout_height="44dp"
+        android:layout_width="118dp"
+        android:layout_height="49dp"
         android:text="Weather Forecast"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.762"
+        app:layout_constraintHorizontal_bias="0.848"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weatherButton" />
 
@@ -40,20 +40,40 @@
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/weatherButton"
+        app:layout_constraintHorizontal_bias="0.344"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142"
+        app:layout_constraintVertical_bias="0.33"
         app:srcCompat="@drawable/mapsicon" />
 
     <TextView
         android:id="@+id/mapCaption"
-        android:layout_width="120dp"
-        android:layout_height="39dp"
+        android:layout_width="119dp"
+        android:layout_height="43dp"
         android:text="Map"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/weatherCaption"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintHorizontal_bias="0.347"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mapButton" />
+
+    <FrameLayout
+        android:id="@+id/profileLayout"
+        android:layout_width="361dp"
+        android:layout_height="86dp"
+        android:background="@drawable/border"
+        app:layout_constraintBottom_toTopOf="@+id/weatherButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.722"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/profileImg"
+            android:layout_width="99dp"
+            android:layout_height="match_parent"
+            />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

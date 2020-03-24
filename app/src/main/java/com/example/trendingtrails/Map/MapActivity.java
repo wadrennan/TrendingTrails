@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 
-import com.example.trendingtrails.HomeActivity;
+import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.R;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,7 +17,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapActivity extends HomeActivity
+public class MapActivity extends BaseActivity
         implements OnMapReadyCallback{
     private GoogleApiClient googleApiClient;
     LocationTrack lt;
