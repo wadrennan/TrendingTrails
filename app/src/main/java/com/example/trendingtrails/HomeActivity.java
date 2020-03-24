@@ -15,6 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.trendingtrails.Location.LocationsMenuActivity;
+import com.example.trendingtrails.Map.MapActivity;
+import com.example.trendingtrails.Models.Account;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 

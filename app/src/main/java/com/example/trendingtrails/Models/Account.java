@@ -1,4 +1,4 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Models;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;

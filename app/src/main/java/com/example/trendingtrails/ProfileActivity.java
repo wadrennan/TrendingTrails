@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.trendingtrails.Models.Account;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

@@ -1,7 +1,6 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Location;
 
 import android.Manifest;
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,8 +17,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
-
-import java.util.Map;
 
 /**
  * Location Tracking Service to get location in background. Use getLatitude and getLongitude to get coordinates

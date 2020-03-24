@@ -27,7 +27,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name=".LocationTrack"></service>
+        <service android:name=".Location.LocationTrack"></service>
         <activity android:name=".HomeActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -36,11 +36,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WeatherActivity"></activity>
+        <activity android:name=".Weather.WeatherActivity"></activity>
         <activity android:name=".ProfileActivity"></activity>
-        <activity android:name=".LocationsMenuActivity"></activity>
-        <activity android:name=".SelectCityActivity"></activity>
-        <activity android:name=".MapActivity">
+        <activity android:name=".Location.LocationsMenuActivity"></activity>
+        <activity android:name=".Weather.SelectCityActivity"></activity>
+        <activity android:name=".Map.MapActivity">
         </activity>
     </application>
 

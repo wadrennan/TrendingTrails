@@ -1,9 +1,8 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Location;
 
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -13,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.trendingtrails.R;
 
 import java.util.ArrayList;
 

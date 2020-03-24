@@ -1,4 +1,4 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Weather;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.example.trendingtrails.R;
 
 import java.util.List;
 

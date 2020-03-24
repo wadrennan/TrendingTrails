@@ -1,4 +1,4 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Weather;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.trendingtrails.R;
 
 public class WeatherFragment extends Fragment {
     @Override

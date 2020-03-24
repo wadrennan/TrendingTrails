@@ -1,4 +1,4 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Location;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,7 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import java.util.ArrayList;
+
+import com.example.trendingtrails.HomeActivity;
+import com.example.trendingtrails.R;
+import com.example.trendingtrails.Weather.SelectCityActivity;
+import com.example.trendingtrails.Weather.WeatherActivity;
 
 
 public class LocationsMenuActivity extends HomeActivity {

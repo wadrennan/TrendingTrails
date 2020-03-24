@@ -1,24 +1,21 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Map;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.location.LocationListener;
 import android.os.Bundle;
-import android.os.IBinder;
 
+import com.example.trendingtrails.HomeActivity;
+import com.example.trendingtrails.Location.LocationTrack;
+import com.example.trendingtrails.R;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.trendingtrails.LocationTrack.MyBinder;
 
 public class MapActivity extends HomeActivity
         implements OnMapReadyCallback{

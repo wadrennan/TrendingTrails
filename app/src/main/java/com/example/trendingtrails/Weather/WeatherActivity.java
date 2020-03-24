@@ -1,9 +1,8 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Weather;
 
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.Request;
@@ -12,6 +11,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.trendingtrails.HomeActivity;
+import com.example.trendingtrails.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

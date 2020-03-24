@@ -1,9 +1,12 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Weather;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import com.example.trendingtrails.HomeActivity;
+import com.example.trendingtrails.R;
 
 public class SelectCityActivity extends HomeActivity {
 
