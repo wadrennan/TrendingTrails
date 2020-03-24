@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(GoogleSignInAccount account) {
         if(account != null) {
-            Global.accountInfo = new AccountInfo(account);
+            Global.AccountInfo = new AccountInfo(account);
             Intent successfulIntent = new Intent(getBaseContext(), HomeActivity.class);
             startActivity(successfulIntent);
             finish();
