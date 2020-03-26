@@ -11,21 +11,21 @@
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginInfoText"
+        app:layout_constraintVertical_bias="0.17" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="318dp"
         android:layout_height="340dp"
-        app:layout_constraintBottom_toTopOf="@+id/login_button"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.342"
         app:srcCompat="@drawable/logo" />
 
     <TextView
@@ -38,9 +38,8 @@
         android:text="Welcome to"
         android:textColor="#000000"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView" />
 
@@ -48,6 +47,7 @@
         android:id="@+id/loginInfoText"
         android:layout_width="345dp"
         android:layout_height="56dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:fontFamily="sans-serif-medium"
         android:lines="2"
@@ -56,17 +56,16 @@
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/login_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginTrendingTxt"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/loginTrailsTxt" />
 
     <TextView
         android:id="@+id/loginTrendingTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="138dp"
+        android:layout_marginEnd="124dp"
         android:fontFamily="@font/fontdiner_swanky"
         android:gravity="center"
         android:text="Trending"
@@ -80,13 +79,15 @@
         android:id="@+id/loginTrailsTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="187dp"
+        android:layout_marginEnd="128dp"
         android:fontFamily="@font/fontdiner_swanky"
         android:gravity="center"
         android:text="Trails"
         android:textColor="#000000"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.58"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
