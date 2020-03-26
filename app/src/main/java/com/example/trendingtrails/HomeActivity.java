@@ -11,6 +11,7 @@ import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Map.MapActivity;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Profile;
+import com.example.trendingtrails.Profile.ProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.sql.Connection;

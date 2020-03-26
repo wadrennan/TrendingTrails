@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.trendingtrails.Models.Global;
+import com.example.trendingtrails.Profile.ProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
