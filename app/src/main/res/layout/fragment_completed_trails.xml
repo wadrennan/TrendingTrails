@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CompletedTrailsFrag"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Profile.CompletedTrailsFragment"/>
+    tools:context=".Profile.CompletedTrailsFragment">
+
+    <LinearLayout
+        android:id="@+id/ctLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="100px"
+        android:layout_marginTop="100px"
+        android:layout_marginRight="100px"
+        android:layout_marginBottom="50px"
+        android:orientation="vertical"></LinearLayout>
+
+</FrameLayout>

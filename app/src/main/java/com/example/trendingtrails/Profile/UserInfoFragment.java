@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -81,6 +82,7 @@ public class UserInfoFragment extends Fragment {
                 String query = "Update [dbo].[Profile] SET name = '" + newName + "', experience = " + newExp + " where email= '" + AccountInfo.personEmail + "' ";
                 Statement stmt = conn.createStatement();
                 stmt.executeUpdate(query);
+                Toast.makeText(getContext(), "Updated.", Toast.LENGTH_LONG).show();
                 UserProfile.displayName = newName;
                 UserProfile.rank = newExp;
             }
