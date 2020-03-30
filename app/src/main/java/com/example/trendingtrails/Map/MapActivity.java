@@ -2,12 +2,18 @@ package com.example.trendingtrails.Map;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Location.LocationTrack;
+import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,15 +22,21 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
 
 public class MapActivity extends BaseActivity
         implements OnMapReadyCallback{
     private GoogleApiClient googleApiClient;
-    LocationTrack lt;
-    private double lat;
-    private double lon;
+    LocationTrack lt;  //Location Service
+    private double lat; //latitude
+    private double lon; //longitude
     private GoogleMap map;
-    LocationReciever broadReceiver;
+    private boolean trackingFlag; // boolean to tell receiver when to call the update Points Function
+    LocationReciever broadReceiver; //Receives broadcasts from Location Service
+    private ArrayList<LatLng> pointList;
 
 
 
@@ -40,12 +52,30 @@ public class MapActivity extends BaseActivity
             lat = lt.getLatitude();
             lon = lt.getLongitude();
         }
+        // headers so that the intent message can be viewed by receiver
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("LocationData");
 
+
+        //register that the receiver is receiving
         broadReceiver = new LocationReciever();
         registerReceiver(broadReceiver, intentFilter);
 
+
+        findViewById(R.id.start_tracking).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                trackingFlag = true;
+                pointList = new ArrayList<>();
+            }
+        });
+        findViewById(R.id.finish_tracking).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(trackingFlag == true) {
+                    trackingFlag = false;
+                    drawTrail();
+                }
+            }
+        });
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -66,8 +96,7 @@ public class MapActivity extends BaseActivity
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
+        //Debug
         System.out.println("Callback");
         //double lat = lt.getLatitude();
         //double lon = lt.getLongitude();
@@ -87,12 +116,11 @@ public class MapActivity extends BaseActivity
     protected void onDestroy() {
         super.onDestroy();
         lt.stopListener();
+        unregisterReceiver(broadReceiver);
     }
     private void updateMap(GoogleMap googleMap){
         System.out.println("Update Map");
         LatLng sydney = new LatLng(lat, lon);
-        //googleMap.addMarker(new MarkerOptions().position(sydney)
-          //      .title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,10));
     }
@@ -106,11 +134,85 @@ public class MapActivity extends BaseActivity
                 lat = intent.getDoubleExtra("lat",0);
                 lon = intent.getDoubleExtra("lng", 0);
                 updateMap(map);
-                // Show it in GraphView
+
+                //Are we tracking for a trail? if so we add the points to be used when the tracking is finished
+                if(trackingFlag == true){
+                    LatLng pt = new LatLng(lat, lon);
+                    pointList.add(pt);
+
+                }
             }
         }
     }
 
+    private void drawTrail(){
+        PolylineOptions polylineOptions = new PolylineOptions();
+
+// Create polyline options with existing LatLng ArrayList
+        polylineOptions.addAll(pointList);
+        polylineOptions
+                .width(5)
+                .color(Color.RED);
+        map.addPolyline(polylineOptions);
+        double dist = 0;
+        for(int i = 0; i+1 < pointList.size(); i++){
+            dist+= getDistanceofTrail(pointList.get(i).latitude, pointList.get(i).longitude, pointList.get(i+1).latitude, pointList.get(i+1).longitude);
+        }
+
+        System.out.println("dist is " +dist+"");
+        askToSave(dist);
+    }
+
+    private double getDistanceofTrail(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
+    private void askToSave(double dist){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Would you like to save?");
+        builder.setMessage("Your total distance was "+dist+" miles. Would you like to save this trail?");
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch(which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        // User clicked the Yes button
+                        System.out.println("Save Button Clicked");
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        // User clicked the No button
+                        System.out.println("Cancel Button Clicked");
+                        break;
+                }
+            }
+        };
+
+        // add the buttons
+        builder.setPositiveButton("Yes", dialogClickListener);
+        builder.setNegativeButton("No", dialogClickListener);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        }
 
 
 }

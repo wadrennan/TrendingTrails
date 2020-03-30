@@ -214,6 +214,7 @@ public class LocationTrack extends Service implements LocationListener {
     public void onProviderDisabled(String s) {
 
     }
+    //sends the data to the activity requesting it
     private void sendDataToActivity()
     {
         Intent sendLevel = new Intent();
