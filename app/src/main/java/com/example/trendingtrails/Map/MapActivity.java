@@ -76,7 +76,7 @@ public class MapActivity extends BaseActivity
         map = googleMap;
         LatLng sydney = new LatLng(lat, lon);
         googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Marker in Sydney"));
+                .title("Your Current Location"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         googleMap.setMyLocationEnabled(true);
 
