@@ -56,14 +56,6 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart(){
-        super.onStart();
-        UserProfile = new Profile();
-        DatabaseTasks profile = new DatabaseTasks();
-        profile.execute("");
-    }
-
-    @Override
     protected void onResume(){
         super.onResume();
         UserProfile = new Profile();

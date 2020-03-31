@@ -6,11 +6,9 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.constraintlayout.solver.widgets.ConstraintHorizontalLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.trendingtrails.Database;
@@ -33,20 +31,17 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class CompletedTrailsFragment extends Fragment {
-    View view;
     Connection conn;
     List<Trail> trails = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        CompletedTrailTasks db = new CompletedTrailTasks();
-        db.execute("");
-        view = inflater.inflate(R.layout.fragment_completed_trails, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_completed_trails, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        new CompletedTrailTasks().execute();
     }
 
     public class CompletedTrailTasks extends AsyncTask<String,String,String> {
@@ -54,43 +49,41 @@ public class CompletedTrailsFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             LinearLayout lm = getView().findViewById(R.id.ctLayout);
+            if(lm == null)
+                return;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, 0, 50);
+            params.setMargins(0, 50, 0, 0);
             LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             textParams.setMargins(10, 0, 0, 0);
             for (Trail trail: trails) {
-                LinearLayout ll = new LinearLayout(view.getContext());
+                LinearLayout ll = new LinearLayout(getView().getContext());
                 ll.setLayoutParams(params);
                 ll.setOrientation(LinearLayout.VERTICAL);
                 ll.setBackground(getResources().getDrawable(R.drawable.border));
                 ll.setPadding(25, 25, 25, 25);
-                LinearLayout l1 = new LinearLayout(view.getContext());
-                TextView name = new TextView(view.getContext());
+                LinearLayout l1 = new LinearLayout(getView().getContext());
+                TextView name = new TextView(getView().getContext());
                 name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 name.setLayoutParams(textParams);
                 name.setText(trail.name);
-                TextView distance = new TextView(view.getContext());
+                TextView distance = new TextView(getView().getContext());
                 distance.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 distance.setLayoutParams(textParams);
                 distance.setText("Distance: " + Double.toString(trail.distance));
-                TextView intensity = new TextView(view.getContext());
+                TextView intensity = new TextView(getView().getContext());
                 intensity.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 intensity.setLayoutParams(textParams);
-                switch(trail.intensity){
-                    case 1:
-                        intensity.setText("Easy");
-                        break;
-                    case 2:
-                        intensity.setText("Medium");
-                        break;
-                    case 3:
-                        intensity.setText("Hard");
-                        break;
+                if (trail.intensity < 4) {
+                    intensity.setText("Easy");
+                } else if (trail.intensity < 8){
+                    intensity.setText("Medium");
                 }
-
-                TextView rating = new TextView(view.getContext());
+                else{
+                    intensity.setText("Hard");
+                }
+                TextView rating = new TextView(getView().getContext());
                 rating.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 rating.setLayoutParams(textParams);
                 rating.setText("Rating: " + Integer.toString(trail.rating));
@@ -116,6 +109,7 @@ public class CompletedTrailsFragment extends Fragment {
                             " where email= '" + Global.AccountInfo.personEmail + "' ";
                     Statement stmt = conn.createStatement();
                     ResultSet rs = stmt.executeQuery(query);
+                    trails.clear();
                     while (rs.next()) {
                         String name = rs.getString("Name");
                         int intensity = rs.getInt("Intensity");
