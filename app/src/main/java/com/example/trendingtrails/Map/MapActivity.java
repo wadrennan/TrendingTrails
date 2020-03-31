@@ -7,13 +7,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.Location.LocationsMenuActivity;
+import com.example.trendingtrails.Models.AccountInfo;
+import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,8 +30,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-
+import com.google.maps.android.PolyUtil;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapActivity extends BaseActivity
         implements OnMapReadyCallback{
@@ -36,7 +44,7 @@ public class MapActivity extends BaseActivity
     private GoogleMap map;
     private boolean trackingFlag; // boolean to tell receiver when to call the update Points Function
     LocationReciever broadReceiver; //Receives broadcasts from Location Service
-    private ArrayList<LatLng> pointList;
+    private List<LatLng> pointList;
 
 
 
@@ -147,7 +155,9 @@ public class MapActivity extends BaseActivity
 
     private void drawTrail(){
         PolylineOptions polylineOptions = new PolylineOptions();
-
+        System.out.println(pointList);
+        String encodedPoly = PolyUtil.encode(pointList);
+        System.out.println("Encoded polyline = "+encodedPoly+"");
 // Create polyline options with existing LatLng ArrayList
         polylineOptions.addAll(pointList);
         polylineOptions
@@ -160,7 +170,7 @@ public class MapActivity extends BaseActivity
         }
 
         System.out.println("dist is " +dist+"");
-        askToSave(dist);
+        askToSave(dist, encodedPoly);
     }
 
     private double getDistanceofTrail(double lat1, double lon1, double lat2, double lon2) {
@@ -183,7 +193,8 @@ public class MapActivity extends BaseActivity
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
-    private void askToSave(double dist){
+
+    private void askToSave(final double dist, final String encodedPoly){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Would you like to save?");
         builder.setMessage("Your total distance was "+dist+" miles. Would you like to save this trail?");
@@ -195,6 +206,13 @@ public class MapActivity extends BaseActivity
                     case DialogInterface.BUTTON_POSITIVE:
                         // User clicked the Yes button
                         System.out.println("Save Button Clicked");
+                        Intent intent = new Intent(getBaseContext(),SaveTrailActivity.class);
+                        intent.putExtra("Distance", dist);
+                        intent.putExtra("encodedPoly", encodedPoly);
+                        System.out.println(Global.AccountInfo.personEmail);
+                        startActivity(intent);
+
+
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -213,6 +231,5 @@ public class MapActivity extends BaseActivity
         AlertDialog dialog = builder.create();
         dialog.show();
         }
-
 
 }

@@ -42,6 +42,8 @@
         <activity android:name=".Location.LocationsMenuActivity" />
         <activity android:name=".Weather.SelectCityActivity" />
         <activity android:name=".Map.MapActivity"></activity>
+        <activity android:name=".Map.SaveTrailActivity" />
+
     </application>
 
 </manifest>
