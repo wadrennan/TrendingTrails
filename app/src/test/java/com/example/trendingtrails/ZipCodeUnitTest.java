@@ -1,17 +1,18 @@
 package com.example.trendingtrails;
 
-import org.junit.Test;
-
 import com.example.trendingtrails.Models.Input;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class UnitTests {
+public class ZipCodeUnitTest {
     @Test
     public void checkZipCodeValidator(){
         String z1 = "12345";

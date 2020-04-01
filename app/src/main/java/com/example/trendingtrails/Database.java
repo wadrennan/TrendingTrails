@@ -1,6 +1,7 @@
 package com.example.trendingtrails;
 
 import android.annotation.SuppressLint;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.example.trendingtrails.Models.User;
@@ -16,8 +17,8 @@ public class Database {
     @SuppressLint("NewApi")
     public static Connection connect()
     {
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         Connection connection = null;
         String ConnectionURL;
         try
