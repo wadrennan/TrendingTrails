@@ -1,6 +1,5 @@
 package com.example.trendingtrails.Profile;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import com.example.trendingtrails.Database;
 import com.example.trendingtrails.R;
 
 import java.sql.Connection;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,41 +63,24 @@ public class UserInfoFragment extends Fragment {
     }
 
     private void updateProfile() {
-        new UpdateProfileTasks().execute();
-    }
-
-    public class UpdateProfileTasks extends AsyncTask<String,String,String> {
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            Toast.makeText(getContext(), "Updated.", Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                conn = Database.connect();        // Connect to database
-                if (conn == null) {
-                    return null;
-                } else {
-                    String newName = nameText.getText().toString();
-                    int newExp = spinner.getSelectedItemPosition();
-                    if (User.displayName == newName && User.rank == newExp) {
-                        conn.close();
-                        return null;
-                    }
-                    String query = "Update [dbo].[Profile] SET name = '" + newName + "', experience = " + newExp + " where email= '" + AccountInfo.personEmail + "' ";
-                    Statement stmt = conn.createStatement();
-                    stmt.executeUpdate(query);
-                    Toast.makeText(getContext(), "Updated.", Toast.LENGTH_LONG).show();
-                    User.displayName = newName;
-                    User.rank = newExp;
-                }
-                conn.close();
-            } catch (Exception ex) {
-                return null;
+        try {
+            conn = Database.connect();        // Connect to database
+            if (conn == null) {
+                return;
             }
-            return null;
+            String newName = nameText.getText().toString();
+            int newExp = spinner.getSelectedItemPosition();
+            if (User.displayName == newName && User.rank == newExp) {
+                conn.close();
+                return;
+            }
+            Database.updateUser(conn, newName, newExp, User);
+            Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
+            User.displayName = newName;
+            User.rank = newExp;
+            conn.close();
+        } catch (Exception ex) {
+            return;
         }
     }
 }

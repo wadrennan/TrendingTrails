@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class DatabaseTest {
+public class DatabaseTests {
     Connection connection;
 
     @Before
@@ -35,5 +35,18 @@ public class DatabaseTest {
         assertThat(dbUser.displayName, equalTo(testUser.displayName));
         assertThat(dbUser.email, equalTo(testUser.email));
         assertThat(dbUser.rank, equalTo(testUser.rank));
+    }
+
+    @Test
+    public void UpdateDatabaseTest() throws SQLException {
+        String email = "test@test.com";
+        String newName = "Jane Doe";
+        int newRank = 1;
+
+        User testUser = Database.getUser(connection, email);
+        Database.updateUser(connection, newName, newRank, testUser);
+        testUser = Database.getUser(connection, testUser.email);
+        assertThat(testUser.displayName, equalTo(newName));
+        assertThat(testUser.rank, equalTo(newRank));
     }
 }

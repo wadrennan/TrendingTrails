@@ -61,4 +61,10 @@ public class Database {
         }
         return null;
     }
+
+    public static void updateUser(Connection conn, String name, int exp, User user) throws SQLException {
+        String query = "Update [dbo].[Profile] SET name = '" + name + "', experience = " + exp + " where email= '" + user.email + "' ";
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(query);
+    }
 }
