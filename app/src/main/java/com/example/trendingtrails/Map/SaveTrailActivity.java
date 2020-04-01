@@ -12,7 +12,9 @@ import android.widget.Toast;
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Location.LocationTrack;
+import com.example.trendingtrails.Models.AccountInfo;
 import com.example.trendingtrails.R;
+import static com.example.trendingtrails.Models.Global.AccountInfo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -67,9 +69,16 @@ public class SaveTrailActivity extends MapActivity {
         String comments = comm.getText().toString();
         double lat = lt.getLatitude();
         double lng = lt.getLongitude();
-        String query = "INSERT INTO AllTrails (rating, intensity, name, comments, lat, long, distance,encoded_polyline) " +
-                "Values ("+ratingSpinner.getSelectedItem()+","+intensitySpinner.getSelectedItem()+",'"+name+"','"+comments+"',"
-                +lat+","+lng+","+distance+",'"+encodedPoly+"');"; //TODO NOT DONE
+        String query = " BEGIN TRANSACTION " +
+                " DECLARE @TrailId int; " +
+                " INSERT INTO AllTrails (rating, intensity, name, comments, lat, long, distance,encoded_polyline) " +
+                " Values ("+ratingSpinner.getSelectedItem()+","+intensitySpinner.getSelectedItem()+",'"+name+"','"+comments+"',"
+                +lat+","+lng+","+distance+",'"+encodedPoly+"'); " + //TODO NOT DONE
+                " SELECT @TrailId = scope_identity(); " +
+                " INSERT INTO AddedTrails (TrailId, email) VALUES (@TrailId, '" + AccountInfo.personEmail + "'); " +
+                " INSERT INTO CompletedTrails (TrailId, email) VALUES (@TrailId, '" + AccountInfo.personEmail + "'); " +
+                " COMMIT";
+
         System.out.println(query);
         try {
             System.out.println("trying to execute");

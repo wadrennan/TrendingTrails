@@ -103,18 +103,18 @@ public class CompletedTrailsFragment extends Fragment {
                     return null;
                 }
                 else {
-                    String query = "SELECT Name, Intensity, Rating, Distance FROM Trails t " +
+                    String query = "SELECT name, intensity, rating, distance FROM AllTrails t " +
                             " JOIN CompletedTrails ct " +
-                            " ON ct.TrailId = t.TrailId " +
+                            " ON ct.TrailId = t.trail_id " +
                             " where email= '" + Global.AccountInfo.personEmail + "' ";
                     Statement stmt = conn.createStatement();
                     ResultSet rs = stmt.executeQuery(query);
                     trails.clear();
                     while (rs.next()) {
-                        String name = rs.getString("Name");
-                        int intensity = rs.getInt("Intensity");
-                        int rating = rs.getInt("Rating");
-                        double distance = rs.getDouble("Distance");
+                        String name = rs.getString("name");
+                        int intensity = rs.getInt("intensity");
+                        int rating = rs.getInt("rating");
+                        double distance = rs.getDouble("distance");
                         trails.add(new Trail(name, intensity, rating, distance));
                     }
                 }
