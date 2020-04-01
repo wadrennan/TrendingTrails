@@ -20,6 +20,7 @@ import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Models.AccountInfo;
 import com.example.trendingtrails.Models.Global;
+import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,7 +46,7 @@ public class MapActivity extends BaseActivity
     private boolean trackingFlag; // boolean to tell receiver when to call the update Points Function
     LocationReciever broadReceiver; //Receives broadcasts from Location Service
     private List<LatLng> pointList;
-
+    public Trail trail;
 
 
     @Override
@@ -147,7 +148,6 @@ public class MapActivity extends BaseActivity
                 if(trackingFlag == true){
                     LatLng pt = new LatLng(lat, lon);
                     pointList.add(pt);
-
                 }
             }
         }
@@ -164,16 +164,18 @@ public class MapActivity extends BaseActivity
                 .width(5)
                 .color(Color.RED);
         map.addPolyline(polylineOptions);
-        double dist = 0;
+        /*double dist = 0;
         for(int i = 0; i+1 < pointList.size(); i++){
             dist+= getDistanceofTrail(pointList.get(i).latitude, pointList.get(i).longitude, pointList.get(i+1).latitude, pointList.get(i+1).longitude);
-        }
-
+        }*/
+        trail = new Trail();
+        double dist = trail.getDistance(pointList);
         System.out.println("dist is " +dist+"");
+
         askToSave(dist, encodedPoly);
     }
 
-    private double getDistanceofTrail(double lat1, double lon1, double lat2, double lon2) {
+    /*private double getDistanceofTrail(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1))
                 * Math.sin(deg2rad(lat2))
@@ -192,7 +194,7 @@ public class MapActivity extends BaseActivity
 
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
-    }
+    }*/
 
     private void askToSave(final double dist, final String encodedPoly){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
