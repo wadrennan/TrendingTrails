@@ -19,7 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class WeatherActivity extends BaseActivity {
@@ -78,7 +81,16 @@ public class WeatherActivity extends BaseActivity {
                         String finalresult=context.getString("valid_date");
                         //String finalresult = String.valueOf(context.getDouble("valid_date"));
                        // list.add(finalresult);
-                        dates.add(finalresult);
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("E, MMMM dd, yyyy");
+                        try {
+
+                            Date date = formatter.parse(finalresult);
+                            dates.add(dateFormat.format(date));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
                         finalresult = String.valueOf(context.getDouble("high_temp"));
                         maxTemps.add(finalresult);
                         finalresult = String.valueOf(context.getDouble("low_temp"));
