@@ -34,8 +34,8 @@ public class LocationTrack extends Service implements LocationListener {
     boolean canGetLocation = false;
 
     Location loc;
-    double latitude;
-    double longitude;
+    double latitude = 0;
+    double longitude = 0;
     private final IBinder mBinder = new MyBinder();
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 5;
@@ -50,8 +50,13 @@ public class LocationTrack extends Service implements LocationListener {
         getLocation();
     }
 
+    public LocationTrack(){
+        this.mContext = this;
+        getLocation();
+    }
 
-    private Location getLocation() {
+
+    public Location getLocation() {
 
         try {
             locationManager = (LocationManager) mContext
@@ -89,6 +94,7 @@ public class LocationTrack extends Service implements LocationListener {
                     if (locationManager != null) {
                         loc = locationManager
                                 .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        System.out.println(loc);
                         if (loc != null) {
                             latitude = loc.getLatitude();
                             longitude = loc.getLongitude();
