@@ -3,21 +3,32 @@ package com.example.trendingtrails.Location;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trendingtrails.BaseActivity;
-import com.example.trendingtrails.HomeActivity;
+import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.R;
 import com.example.trendingtrails.Weather.SelectCityActivity;
 import com.example.trendingtrails.Weather.WeatherActivity;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import static com.example.trendingtrails.Models.Global.AccountInfo;
 
 
 public class LocationsMenuActivity extends BaseActivity {
     //Location Tracking Service
     LocationTrack locationTrack;
+    String code1;
+    String code2;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +75,50 @@ public class LocationsMenuActivity extends BaseActivity {
                 }
             }
         });
+
+        findViewById(R.id.location1_forecast).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(code1 != null){
+                    Intent intent = new Intent(getApplicationContext(), WeatherActivity.class);
+                    intent.putExtra("zip", code1);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        findViewById(R.id.location2_forecast).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(code2 != null){
+                    Intent intent = new Intent(getApplicationContext(), WeatherActivity.class);
+                    intent.putExtra("zip",code2);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        findViewById(R.id.location1_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeZipCode(code1);
+                new ZipCodeTasks().execute();
+            }
+        });
+
+        findViewById(R.id.location2_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeZipCode(code2);
+                new ZipCodeTasks().execute();
+            }
+        });
+    }
+
+    @Override
+    protected  void onResume(){
+        super.onResume();
+        new ZipCodeTasks().execute();
     }
 
     @Override
@@ -83,6 +138,91 @@ public class LocationsMenuActivity extends BaseActivity {
                 // Show it in GraphView
             }
 
+        }
+    }
+
+    public class ZipCodeTasks extends AsyncTask<String,String,String>
+    {
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            TextView location1 = findViewById(R.id.location1);
+            Button location1Btn = findViewById(R.id.location1_forecast);
+            Button delete1Btn = findViewById(R.id.location1_delete);
+            if(code1 != null) {
+                location1.setText("Zip Code: " + code1);
+                location1Btn.setVisibility(View.VISIBLE);
+                delete1Btn.setVisibility(View.VISIBLE);
+            }
+            else{
+                location1.setText("Location 1");
+                location1Btn.setVisibility(View.INVISIBLE);
+                delete1Btn.setVisibility(View.INVISIBLE);
+            }
+            TextView location2 = findViewById(R.id.location2);
+            Button location2Btn = findViewById(R.id.location2_forecast);
+            Button delete2Btn = findViewById(R.id.location2_delete);
+
+            if(code2 != null){
+                location2.setText("Zip Code: " + code2);
+                location2Btn.setVisibility(View.VISIBLE);
+                delete2Btn.setVisibility(View.VISIBLE);
+            }
+            else{
+                location2.setText("Location 2");
+                location2Btn.setVisibility(View.INVISIBLE);
+                delete2Btn.setVisibility(View.INVISIBLE);
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params)
+        {
+            try
+            {
+                Connection conn = Database.connect();
+                if (conn == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    String query = "Select code from [dbo].[ZipCodes] where email= '" + Global.AccountInfo.personEmail + "' " +
+                            " Order by id desc ";
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery(query);
+                    code1 = null;
+                    code2 = null;
+                    if(rs.next())
+                    {
+                        code1 = rs.getString("code");
+                        if(rs.next()){
+                            code2 = rs.getString("code");
+                        }
+                    }
+                }
+                conn.close();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            return null;
+        }
+    }
+
+    private void removeZipCode(String code) {
+        Connection conn = Database.connect();
+        String query = " DELETE TOP(1) FROM ZipCodes WHERE code = " + code +
+                " AND email = '" + AccountInfo.personEmail + "' ";
+
+        System.out.println(query);
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (Exception e) {
+            System.out.println("Error in removing Location");
+            System.out.println(e);
         }
     }
 }
