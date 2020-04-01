@@ -10,16 +10,14 @@ import android.widget.TextView;
 import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Map.MapActivity;
 import com.example.trendingtrails.Models.Global;
-import com.example.trendingtrails.Models.Profile;
+import com.example.trendingtrails.Models.User;
 import com.example.trendingtrails.Profile.ProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 import static com.example.trendingtrails.Models.Global.AccountInfo;
-import static com.example.trendingtrails.Models.Global.UserProfile;
+import static com.example.trendingtrails.Models.Global.User;
 
 public class HomeActivity extends BaseActivity {
     TextView rankTxt;
@@ -58,9 +56,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        UserProfile = new Profile();
-        DatabaseTasks profile = new DatabaseTasks();
-        profile.execute("");
+        new DatabaseTasks().execute();
     }
 
     public class DatabaseTasks extends AsyncTask<String,String,String>
@@ -69,7 +65,7 @@ public class HomeActivity extends BaseActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             String rankStr = "Rank: ";
-            switch(UserProfile.rank){
+            switch(User.rank){
                 case 1:
                     rankStr += "Beginner";
                     break;
@@ -81,7 +77,7 @@ public class HomeActivity extends BaseActivity {
                     break;
             }
             rankTxt.setText(rankStr);
-            welcomeTxt.setText("Welcome, " + UserProfile.displayName);
+            welcomeTxt.setText("Welcome, " + User.displayName);
         }
 
         @Override
@@ -96,20 +92,13 @@ public class HomeActivity extends BaseActivity {
                 }
                 else
                 {
-                    String query = "Select * from [dbo].[Profile] where email= '" + Global.AccountInfo.personEmail + "' ";
-                    Statement stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery(query);
-                    if(rs.next())
+                    User = Database.getUser(conn, AccountInfo.personEmail);
+                    if(User == null)
                     {
-                        UserProfile.displayName = rs.getString("name");
-                        UserProfile.rank = rs.getInt("experience");
-                    }
-                    else
-                    {
-                        UserProfile.displayName = Global.AccountInfo.personGivenName + " " + Global.AccountInfo.personFamilyName;
-                        UserProfile.rank = 0;
-                        query = "INSERT INTO [dbo].[Profile] (email, name, experience) VALUES ('" + AccountInfo.personEmail + "', '" + UserProfile.displayName +"', 0) ";
-                        stmt.execute(query);
+                        String name = Global.AccountInfo.personGivenName + " " + Global.AccountInfo.personFamilyName;
+                        int rank = 0;
+                        User = new User(AccountInfo.personEmail, name, rank);
+                        Database.insertUser(conn, User);
                     }
                 }
                 conn.close();

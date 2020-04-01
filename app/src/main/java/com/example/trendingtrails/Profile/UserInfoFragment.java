@@ -1,5 +1,6 @@
 package com.example.trendingtrails.Profile;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.trendingtrails.Models.Global.AccountInfo;
-import static com.example.trendingtrails.Models.Global.UserProfile;
+import static com.example.trendingtrails.Models.Global.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +42,7 @@ public class UserInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_info, container, false);
         nameText = view.findViewById(R.id.nameText);
-        nameText.setText(UserProfile.displayName);
+        nameText.setText(User.displayName);
         TextView emailTxt = view.findViewById(R.id.emailText);
         emailTxt.setText(AccountInfo.personEmail);
         spinner = view.findViewById(R.id.experienceSpinner);
@@ -53,7 +54,7 @@ public class UserInfoFragment extends Fragment {
         dataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, options);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
-        spinner.setSelection(UserProfile.rank);
+        spinner.setSelection(User.rank);
         view.findViewById(R.id.submitProfileChangesBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,33 +65,41 @@ public class UserInfoFragment extends Fragment {
     }
 
     private void updateProfile() {
-        try
-        {
-            conn = Database.connect();        // Connect to database
-            if (conn == null)
-            {
-                return;
-            }
-            else
-            {
-                String newName = nameText.getText().toString();
-                int newExp = spinner.getSelectedItemPosition();
-                if(UserProfile.displayName == newName && UserProfile.rank == newExp){
-                    conn.close();
-                    return;
-                }
-                String query = "Update [dbo].[Profile] SET name = '" + newName + "', experience = " + newExp + " where email= '" + AccountInfo.personEmail + "' ";
-                Statement stmt = conn.createStatement();
-                stmt.executeUpdate(query);
-                Toast.makeText(getContext(), "Updated.", Toast.LENGTH_LONG).show();
-                UserProfile.displayName = newName;
-                UserProfile.rank = newExp;
-            }
-            conn.close();
+        new UpdateProfileTasks().execute();
+    }
+
+    public class UpdateProfileTasks extends AsyncTask<String,String,String> {
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Toast.makeText(getContext(), "Updated.", Toast.LENGTH_LONG).show();
         }
-        catch (Exception ex)
-        {
-            return;
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                conn = Database.connect();        // Connect to database
+                if (conn == null) {
+                    return null;
+                } else {
+                    String newName = nameText.getText().toString();
+                    int newExp = spinner.getSelectedItemPosition();
+                    if (User.displayName == newName && User.rank == newExp) {
+                        conn.close();
+                        return null;
+                    }
+                    String query = "Update [dbo].[Profile] SET name = '" + newName + "', experience = " + newExp + " where email= '" + AccountInfo.personEmail + "' ";
+                    Statement stmt = conn.createStatement();
+                    stmt.executeUpdate(query);
+                    Toast.makeText(getContext(), "Updated.", Toast.LENGTH_LONG).show();
+                    User.displayName = newName;
+                    User.rank = newExp;
+                }
+                conn.close();
+            } catch (Exception ex) {
+                return null;
+            }
+            return null;
         }
     }
 }

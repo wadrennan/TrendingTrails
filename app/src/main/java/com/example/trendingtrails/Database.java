@@ -1,20 +1,23 @@
 package com.example.trendingtrails;
 
 import android.annotation.SuppressLint;
-import android.os.StrictMode;
 import android.util.Log;
+
+import com.example.trendingtrails.Models.User;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Database {
 
     @SuppressLint("NewApi")
     public static Connection connect()
     {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        //StrictMode.setThreadPolicy(policy);
         Connection connection = null;
         String ConnectionURL;
         try
@@ -36,5 +39,25 @@ public class Database {
             Log.e("Other : ", e.getMessage());
         }
         return connection;
+    }
+
+    public static void insertUser(Connection conn, User user) throws SQLException {
+        String query = "INSERT INTO [dbo].[Profile] (email, name, experience) VALUES ('" + user.email + "', '" + user.displayName +"', "+ user.rank + ") ";
+        Statement stmt = conn.createStatement();
+        stmt.execute(query);
+    }
+
+    public static User getUser(Connection conn, String email) throws SQLException {
+        String query = "SELECT email, name, experience FROM [dbo].[Profile] WHERE email = '" + email + "'";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        User user = new User();
+        if(rs.next()){
+             user.email = rs.getString("email");
+             user.displayName =  rs.getString("name");
+             user.rank = rs.getInt("experience");
+             return user;
+        }
+        return null;
     }
 }
