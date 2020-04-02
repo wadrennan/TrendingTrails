@@ -31,6 +31,9 @@ public class UserTests {
 
     @Test
     public void settingValuesTest(){
+        assertNull(user1.email);
+        assertNull(user1.displayName);
+        assertEquals(user1.rank, 0);
         assertEquals(user2.email, "test@trendingtrails.com");
         assertEquals(user2.displayName, "jamal");
         assertEquals(user2.rank, 2);
