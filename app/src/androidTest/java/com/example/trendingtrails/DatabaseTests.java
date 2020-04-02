@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class DatabaseTests {
@@ -32,6 +33,7 @@ public class DatabaseTests {
         User testUser = new User(email, "John Smith", 2);
         Database.insertUser(connection, testUser);
         User dbUser = Database.getUser(connection, email);
+        assertNotNull(dbUser);
         assertThat(dbUser.displayName, equalTo(testUser.displayName));
         assertThat(dbUser.email, equalTo(testUser.email));
         assertThat(dbUser.rank, equalTo(testUser.rank));
