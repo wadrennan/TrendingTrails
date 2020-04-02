@@ -20,12 +20,12 @@ public class UserTests {
     }
 
     @Test
-    public void createTrail1Test(){
+    public void createUser1Test(){
         assertNotNull(user1);
     }
 
     @Test
-    public void createTrail2Test(){
+    public void createUser2Test(){
         assertNotNull(user2);
     }
 
