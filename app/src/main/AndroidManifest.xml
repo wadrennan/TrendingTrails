@@ -43,8 +43,8 @@
         <activity android:name=".Weather.SelectCityActivity" />
         <activity android:name=".Map.MapActivity"></activity>
         <activity android:name=".Map.SaveTrailActivity" />
-        <activity android:name=".Map.MapMenuActivity"><intent-filter>
-            <!--<action android:name="android.intent.action.MAIN" />
+        <activity android:name=".Map.MapMenuActivity"><!--<intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>--></activity>
