@@ -105,10 +105,7 @@ public class MapActivity extends BaseActivity
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        //Debug
         System.out.println("Callback");
-        //double lat = lt.getLatitude();
-        //double lon = lt.getLongitude();
         System.out.println(lat);
         System.out.println(lon);
         map = googleMap;
@@ -164,10 +161,6 @@ public class MapActivity extends BaseActivity
                 .width(5)
                 .color(Color.RED);
         map.addPolyline(polylineOptions);
-        /*double dist = 0;
-        for(int i = 0; i+1 < pointList.size(); i++){
-            dist+= getDistanceofTrail(pointList.get(i).latitude, pointList.get(i).longitude, pointList.get(i+1).latitude, pointList.get(i+1).longitude);
-        }*/
         trail = new Trail();
         double dist = trail.getDistance(pointList);
         System.out.println("dist is " +dist+"");
@@ -175,26 +168,6 @@ public class MapActivity extends BaseActivity
         askToSave(dist, encodedPoly);
     }
 
-    /*private double getDistanceofTrail(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1))
-                * Math.sin(deg2rad(lat2))
-                + Math.cos(deg2rad(lat1))
-                * Math.cos(deg2rad(lat2))
-                * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        return (dist);
-    }
-
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }*/
 
     private void askToSave(final double dist, final String encodedPoly){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
