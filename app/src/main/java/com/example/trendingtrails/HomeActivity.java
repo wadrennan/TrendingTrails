@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Map.MapActivity;
+import com.example.trendingtrails.Map.MapMenuActivity;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.User;
 import com.example.trendingtrails.Profile.ProfileActivity;
@@ -37,7 +38,7 @@ public class HomeActivity extends BaseActivity {
         findViewById(R.id.mapButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        Intent activityIntent = new Intent(getBaseContext(), MapActivity.class);
+                        Intent activityIntent = new Intent(getBaseContext(), MapMenuActivity.class);
                         startActivity(activityIntent);
                 }
         });

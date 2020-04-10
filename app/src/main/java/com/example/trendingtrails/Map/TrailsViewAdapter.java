@@ -53,7 +53,13 @@ public class TrailsViewAdapter extends RecyclerView.Adapter<TrailsViewAdapter.Vi
         name.setText(t.name);
         TextView distance = viewHolder.distance;
         distance.setText(""+t.distance+" miles");
+        //start intent of map with existing trail!
+        viewHolder.mapTrail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
     }
 
     @Override

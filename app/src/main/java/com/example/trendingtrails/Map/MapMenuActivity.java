@@ -1,29 +1,19 @@
 package com.example.trendingtrails.Map;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Database;
-import com.example.trendingtrails.HomeActivity;
-import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,12 +36,9 @@ public class MapMenuActivity extends BaseActivity {
                 startActivity(activityIntent);
             }
         });
+
+        //Recycler View of cards. Each card reflects item_trail layout
         trailCards = (RecyclerView) findViewById(R.id.recycler_view);
-
-
-        //On click get Trail list
-
-        //Connect to database
 
         conn = Database.connect();
         if(conn == null){
@@ -60,48 +47,50 @@ public class MapMenuActivity extends BaseActivity {
             sqlError();
         }
         else{
-           populateScrollView();
+            String query = "SELECT name, distance FROM AllTrails WHERE rating > 6";
+           new QueryDb().execute(query);
         }
     }
 
     private void sqlError(){
-        TextView err = new TextView(this);
-        err.setText("Popular Trails Unavailable");
-        err.setGravity(Gravity.CENTER);
-        err.setTextSize(18);
-        //((LinearLayout) scroll).addView(err);
+        Toast.makeText(getApplicationContext(), "Popular Trails Unavailable", Toast.LENGTH_LONG).show();
     }
 
-    //Executes query and populates scroll view with results
-    private void populateScrollView(){
-        String query = "SELECT name, distance FROM AllTrails WHERE rating > 6 AND distance != 0";
-        try{
-            String name;
-            double dist;
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-           // rs.next();
-            List<Trail> trailList = new ArrayList<>();
-            int counter = 0;
-            //Button Ids will be id%3==0 TextViews %1 %2
-            /*while(rs.next()){
-                name =  rs.getString("name");
-                dist = rs.getDouble("distance");
-                Trail t = new Trail(name,0,0,dist);
-                trailList.add(t);
+    //Async task so the UI thread not overburdened
+    private class QueryDb extends AsyncTask<String,Void, List<Trail>>{
+        //Queries db and populates a list of results asynchronously
+        @Override
+        protected List<Trail> doInBackground(String... query){
+            try {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query[0]);
+                List<Trail> trailList = new ArrayList<>();
                 rs.next();
-                counter++;
-            }*/
-            System.out.println(counter);
+                String name;
+                double dist;
+                while(!rs.isAfterLast()){
+                    name =  rs.getString("name");
+                    dist = rs.getDouble("distance");
+                    Trail t = new Trail(name,0,0,dist);
+                    trailList.add(t);
+                    rs.next();
+                }
+                return trailList;
+            }
+            catch(SQLException e){
+                System.out.println("Error in SELECT in MapMenu");
+                sqlError();
+                return null;
+            }
+        }
+
+        //Executes on UI thread after aync query and list generation is done
+        @Override
+        protected void onPostExecute(List<Trail> trailList){
+            super.onPostExecute(trailList);
             TrailsViewAdapter adapter = new TrailsViewAdapter(trailList);
             trailCards.setAdapter(adapter);
-            trailCards.setLayoutManager(new LinearLayoutManager(this));
-            //Toast.makeText(getApplicationContext(), ""+name+" "+rate+"", Toast.LENGTH_LONG).show();
-        }
-        catch(SQLException e){
-            System.out.println("Error in SELECT in MapMenu");
-            //function to output trails not available
-            sqlError();
+            trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         }
     }
 
