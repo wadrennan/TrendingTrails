@@ -45,6 +45,7 @@
         <activity android:name=".Map.SaveTrailActivity" />
         <activity android:name=".Map.MapMenuActivity" />
         <activity android:name=".Map.TrailsNearMeActivity" />
+        <activity android:name=".Map.MapExistingTrailActivity"></activity>
     </application>
 
 </manifest>

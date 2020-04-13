@@ -1,7 +1,10 @@
 package com.example.trendingtrails.Map;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,7 +24,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrailsNearMeActivity extends BaseActivity {
+public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdapter.OnMapListener {
     private Connection conn;
     private RecyclerView trailCards;
     private double lat;
@@ -58,6 +61,21 @@ public class TrailsNearMeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public void onMapClick(int position) {
+        //Intent intent = new Intent(this, MapExistingTrailActivity.class);
+        String id = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.id_number)).getText().toString();
+        int id_num = Integer.parseInt(id);
+        System.out.println("Trail id "+id_num+" clicked!");
+        Intent intent = new Intent(this, MapExistingTrailActivity.class);
+        intent.putExtra("TRAIL_ID", id_num);
+        startActivity(intent);
+       // String name = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.trail_name)).getText().toString();
+        //System.out.println("Trail "+name+" clicked! id = "+id);
+
+    }
+   //TODO: Implement function to navigate to map existing trail
+
     private class QueryDb extends AsyncTask<String,Void, List<Trail>> {
         //Queries db and populates a list of results asynchronously
         @Override
@@ -91,7 +109,7 @@ public class TrailsNearMeActivity extends BaseActivity {
         @Override
         protected void onPostExecute(List<Trail> trailList){
             super.onPostExecute(trailList);
-            TrailsViewAdapter adapter = new TrailsViewAdapter(trailList);
+            TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, TrailsNearMeActivity.this);
             trailCards.setAdapter(adapter);
             trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         }

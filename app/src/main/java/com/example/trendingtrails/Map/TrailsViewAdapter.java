@@ -17,24 +17,41 @@ import java.util.List;
 public class TrailsViewAdapter extends RecyclerView.Adapter<TrailsViewAdapter.ViewHolder> {
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView name;
         public TextView distance;
         public Button mapTrail;
+        OnMapListener onMapListener;
+        public TextView id;
 
-        public ViewHolder(View itemView){
+        public ViewHolder(View itemView, OnMapListener onMapListener){
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.trail_name);
             distance = (TextView) itemView.findViewById(R.id.distance);
             mapTrail = (Button) itemView.findViewById(R.id.map_trail);
+            id = itemView.findViewById(R.id.id_number);
+            this.onMapListener = onMapListener;
+            mapTrail.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            onMapListener.onMapClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnMapListener{
+        void onMapClick(int position);
     }
     //Members
     private List<Trail> mTrails;
+    private OnMapListener monMapListener;
 
     //Constructor
-    public TrailsViewAdapter(List<Trail> t){
+    public TrailsViewAdapter(List<Trail> t, OnMapListener onMapListener){
+
         mTrails = t;
+        this.monMapListener = onMapListener;
     }
 
     @Override
@@ -42,7 +59,7 @@ public class TrailsViewAdapter extends RecyclerView.Adapter<TrailsViewAdapter.Vi
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View trailView = inflater.inflate(R.layout.item_trail, parent, false);
-        ViewHolder viewHolder = new ViewHolder(trailView);
+        ViewHolder viewHolder = new ViewHolder(trailView, monMapListener);
         return viewHolder;
     }
 
@@ -53,13 +70,9 @@ public class TrailsViewAdapter extends RecyclerView.Adapter<TrailsViewAdapter.Vi
         name.setText(t.name);
         TextView distance = viewHolder.distance;
         distance.setText(""+t.distance+" miles");
-        //start intent of map with existing trail!
-        viewHolder.mapTrail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        TextView id = viewHolder.id;
+        id.setText(""+t.id);
+        id.setVisibility(View.INVISIBLE);
     }
 
     @Override

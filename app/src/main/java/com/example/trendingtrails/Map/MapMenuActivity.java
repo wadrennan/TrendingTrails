@@ -21,7 +21,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapMenuActivity extends BaseActivity {
+public class MapMenuActivity extends BaseActivity implements TrailsViewAdapter.OnMapListener {
 
     private Connection conn;
     private RecyclerView trailCards;
@@ -66,6 +66,16 @@ public class MapMenuActivity extends BaseActivity {
         Toast.makeText(getApplicationContext(), "Popular Trails Unavailable", Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onMapClick(int position) {
+        String id = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.id_number)).getText().toString();
+        int id_num = Integer.parseInt(id);
+        System.out.println("Trail id "+id_num+" clicked!");
+        Intent intent = new Intent(this, MapExistingTrailActivity.class);
+        intent.putExtra("TRAIL_ID", id_num);
+        startActivity(intent);
+    }
+
     //Async task so the UI thread not overburdened
     private class QueryDb extends AsyncTask<String,Void, List<Trail>>{
         //Queries db and populates a list of results asynchronously
@@ -100,7 +110,7 @@ public class MapMenuActivity extends BaseActivity {
         @Override
         protected void onPostExecute(List<Trail> trailList){
             super.onPostExecute(trailList);
-            TrailsViewAdapter adapter = new TrailsViewAdapter(trailList);
+            TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, MapMenuActivity.this);
             trailCards.setAdapter(adapter);
             trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         }
