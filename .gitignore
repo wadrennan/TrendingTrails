@@ -15,3 +15,4 @@
 .idea/gradle.xml
 gradle/wrapper/gradle-wrapper.properties
 gradlew
+build.gradle
