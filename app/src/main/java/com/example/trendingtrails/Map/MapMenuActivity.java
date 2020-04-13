@@ -53,7 +53,7 @@ public class MapMenuActivity extends BaseActivity {
             sqlError();
         }
         else{
-            String query = "SELECT name, distance FROM AllTrails WHERE rating > 6";
+            String query = "SELECT trail_id, name, distance FROM AllTrails WHERE rating > 6";
            new QueryDb().execute(query);
         }
     }
@@ -72,12 +72,14 @@ public class MapMenuActivity extends BaseActivity {
                 ResultSet rs = stmt.executeQuery(query[0]);
                 List<Trail> trailList = new ArrayList<>();
                 rs.next();
+                int id;
                 String name;
                 double dist;
                 while(!rs.isAfterLast()){
+                    id = rs.getInt("trail_id");
                     name =  rs.getString("name");
                     dist = rs.getDouble("distance");
-                    Trail t = new Trail(name,0,0,dist);
+                    Trail t = new Trail(id, name,0,0,dist);
                     trailList.add(t);
                     rs.next();
                 }

@@ -2,9 +2,11 @@ package com.example.trendingtrails.Models;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Trail {
+public class Trail implements Serializable {
+    public int id;
     public String name;
     public int intensity;
     public int rating;
@@ -17,7 +19,8 @@ public class Trail {
         rating = 0;
         distance = 0;
     }
-    public Trail(String name, int intense, int rate, double dist){
+    public Trail(int id, String name, int intense, int rate, double dist){
+        this.id = id;
         this.name = name;
         intensity = intense;
         rating = rate;

@@ -1,5 +1,6 @@
 package com.example.trendingtrails.Profile;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Info.TrailInfoActivity;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
@@ -57,7 +59,7 @@ public class AddedTrailsFragment extends Fragment {
             LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             textParams.setMargins(10, 0, 0, 0);
-            for (Trail trail: trails) {
+            for (final Trail trail: trails) {
                 LinearLayout ll = new LinearLayout(getView().getContext());
                 ll.setLayoutParams(params);
                 ll.setOrientation(LinearLayout.VERTICAL);
@@ -91,6 +93,14 @@ public class AddedTrailsFragment extends Fragment {
                 ll.addView(distance);
                 ll.addView(intensity);
                 ll.addView(rating);
+                ll.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getContext(), TrailInfoActivity.class);
+                        intent.putExtra("Trail", trail);
+                        startActivity(intent);
+                    }
+                });
                 lm.addView(ll);
             }
         }
@@ -103,7 +113,7 @@ public class AddedTrailsFragment extends Fragment {
                     return null;
                 }
                 else {
-                    String query = "SELECT name, intensity, rating, distance FROM AllTrails t " +
+                    String query = "SELECT trail_id, name, intensity, rating, distance FROM AllTrails t " +
                             " JOIN AddedTrails ct " +
                             " ON ct.TrailId = t.trail_id " +
                             " where email= '" + Global.AccountInfo.personEmail + "' ";
@@ -111,11 +121,12 @@ public class AddedTrailsFragment extends Fragment {
                     ResultSet rs = stmt.executeQuery(query);
                     trails.clear();
                     while (rs.next()) {
+                        int id = rs.getInt("trail_id");
                         String name = rs.getString("name");
                         int intensity = rs.getInt("intensity");
                         int rating = rs.getInt("rating");
                         double distance = rs.getDouble("distance");
-                        trails.add(new Trail(name, intensity, rating, distance));
+                        trails.add(new Trail(id, name, intensity, rating, distance));
                     }
                 }
                 conn.close();

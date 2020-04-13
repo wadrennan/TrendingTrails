@@ -14,12 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".Info.TrailInfoActivity"></activity>
+        <activity android:name=".BaseActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <!--              The API key for Google Maps-based APIs. -->
+            android:value="@integer/google_play_services_version" /> <!-- The API key for Google Maps-based APIs. -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -41,11 +41,10 @@
         <activity android:name=".Profile.ProfileActivity" />
         <activity android:name=".Location.LocationsMenuActivity" />
         <activity android:name=".Weather.SelectCityActivity" />
-        <activity android:name=".Map.MapActivity"></activity>
+        <activity android:name=".Map.MapActivity" />
         <activity android:name=".Map.SaveTrailActivity" />
-        <activity android:name=".Map.MapMenuActivity"></activity>
-        <activity android:name=".Map.TrailsNearMeActivity"></activity>
-
+        <activity android:name=".Map.MapMenuActivity" />
+        <activity android:name=".Map.TrailsNearMeActivity" />
     </application>
 
 </manifest>
