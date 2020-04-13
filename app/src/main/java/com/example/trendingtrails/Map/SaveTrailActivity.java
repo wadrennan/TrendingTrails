@@ -71,12 +71,14 @@ public class SaveTrailActivity extends MapActivity {
         double lng = lt.getLongitude();
         String query = " BEGIN TRANSACTION " +
                 " DECLARE @TrailId int; " +
-                " INSERT INTO AllTrails (rating, intensity, name, comments, lat, long, distance,encoded_polyline) " +
-                " Values ("+ratingSpinner.getSelectedItem()+","+intensitySpinner.getSelectedItem()+",'"+name+"','"+comments+"',"
-                +lat+","+lng+","+distance+",'"+encodedPoly+"'); " + //TODO NOT DONE
+                " INSERT INTO AllTrails (name, lat, long, distance,encoded_polyline) " +
+                " Values ('"+name+"',"+lat+","+lng+","+distance+",'"+encodedPoly+"'); " + //TODO NOT DONE
                 " SELECT @TrailId = scope_identity(); " +
-                " INSERT INTO AddedTrails (TrailId, email) VALUES (@TrailId, '" + AccountInfo.personEmail + "'); " +
-                " INSERT INTO CompletedTrails (TrailId, email) VALUES (@TrailId, '" + AccountInfo.personEmail + "'); " +
+                " INSERT INTO AddedTrails (TrailId, email) " +
+                " VALUES (@TrailId, '" + AccountInfo.personEmail + "'); " +
+                " INSERT INTO CompletedTrails (TrailId, email, rating, intensity, review) " +
+                " VALUES (@TrailId, '" + AccountInfo.personEmail + "',"+ratingSpinner.getSelectedItem()+","
+                +intensitySpinner.getSelectedItem()+",'"+comments+"'); "+
                 " COMMIT";
 
         System.out.println(query);

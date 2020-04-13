@@ -53,7 +53,11 @@ public class MapMenuActivity extends BaseActivity {
             sqlError();
         }
         else{
-            String query = "SELECT trail_id, name, distance FROM AllTrails WHERE rating > 6";
+            String query = "SELECT trail_id, name, distance FROM AllTrails t " +
+                    " JOIN CompletedTrails ct " +
+                    "ON ct.TrailId = t.trail_id " +
+                    "GROUP BY trail_id, name, distance " +
+                    "HAVING AVG(rating) > 6";
            new QueryDb().execute(query);
         }
     }
