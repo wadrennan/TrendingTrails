@@ -104,7 +104,7 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
                     BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
                     truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
                     dist = truncatedDist.doubleValue();
-                    Trail t = new Trail(id, name,0,0,dist);
+                    Trail t = new Trail(id, name,dist);
                     trailList.add(t);
                     rs.next();
                 }
