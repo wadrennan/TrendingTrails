@@ -76,9 +76,9 @@ public class SaveTrailActivity extends MapActivity {
                 " SELECT @TrailId = scope_identity(); " +
                 " INSERT INTO AddedTrails (TrailId, email) " +
                 " VALUES (@TrailId, '" + AccountInfo.personEmail + "'); " +
-                " INSERT INTO CompletedTrails (TrailId, email, rating, intensity, review) " +
+                " INSERT INTO CompletedTrails (TrailId, email, rating, intensity, review, date) " +
                 " VALUES (@TrailId, '" + AccountInfo.personEmail + "',"+ratingSpinner.getSelectedItem()+","
-                +intensitySpinner.getSelectedItem()+",'"+comments+"'); "+
+                +intensitySpinner.getSelectedItem()+",'"+comments+"', CURRENT_TIMESTAMP); "+
                 " COMMIT";
 
         System.out.println(query);
