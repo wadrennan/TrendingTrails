@@ -8,22 +8,16 @@ import java.util.List;
 public class Trail implements Serializable {
     public int id;
     public String name;
-    public int intensity;
-    public int rating;
     public double distance; //miles
     public String encodedPolyline;
 
     public Trail(){
         name = "";
-        intensity = 0;
-        rating = 0;
         distance = 0;
     }
     public Trail(int id, String name, int intense, int rate, double dist){
         this.id = id;
         this.name = name;
-        intensity = intense;
-        rating = rate;
         distance = dist;
     }
     public double getDistance(List<LatLng> pointList){

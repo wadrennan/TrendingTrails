@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.trendingtrails.Location.LocationsMenuActivity;
-import com.example.trendingtrails.Map.MapActivity;
 import com.example.trendingtrails.Map.MapMenuActivity;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.User;

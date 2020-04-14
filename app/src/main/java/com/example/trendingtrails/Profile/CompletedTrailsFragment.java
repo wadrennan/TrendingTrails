@@ -14,10 +14,12 @@ import androidx.fragment.app.Fragment;
 
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Info.TrailInfoActivity;
+import com.example.trendingtrails.Models.AddedTrail;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -34,7 +36,7 @@ import java.util.List;
  */
 public class CompletedTrailsFragment extends Fragment {
     Connection conn;
-    List<Trail> trails = new ArrayList<>();
+    List<AddedTrail> trails = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_completed_trails, container, false);
@@ -60,13 +62,12 @@ public class CompletedTrailsFragment extends Fragment {
             LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             textParams.setMargins(10, 0, 0, 0);
-            for (final Trail trail: trails) {
+            for (final AddedTrail trail: trails) {
                 LinearLayout ll = new LinearLayout(getView().getContext());
                 ll.setLayoutParams(params);
                 ll.setOrientation(LinearLayout.VERTICAL);
                 ll.setBackground(getResources().getDrawable(R.drawable.border));
                 ll.setPadding(25, 25, 25, 25);
-                LinearLayout l1 = new LinearLayout(getView().getContext());
                 TextView name = new TextView(getView().getContext());
                 name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 name.setLayoutParams(textParams);
@@ -74,7 +75,7 @@ public class CompletedTrailsFragment extends Fragment {
                 TextView distance = new TextView(getView().getContext());
                 distance.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 distance.setLayoutParams(textParams);
-                distance.setText("Distance: " + Double.toString(trail.distance));
+                distance.setText("Distance: " + String.format("%.2f", trail.distance) + " miles");
                 TextView intensity = new TextView(getView().getContext());
                 intensity.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 intensity.setLayoutParams(textParams);
@@ -114,7 +115,7 @@ public class CompletedTrailsFragment extends Fragment {
                     return null;
                 }
                 else {
-                    String query = "SELECT trail_id, name, intensity, rating, distance FROM AllTrails t " +
+                    String query = "SELECT trail_id, name, intensity, rating, distance, lat, long FROM AllTrails t " +
                             " JOIN CompletedTrails ct " +
                             " ON ct.TrailId = t.trail_id " +
                             " where email= '" + Global.AccountInfo.personEmail + "' ";
@@ -127,7 +128,7 @@ public class CompletedTrailsFragment extends Fragment {
                         int intensity = rs.getInt("intensity");
                         int rating = rs.getInt("rating");
                         double distance = rs.getDouble("distance");
-                        trails.add(new Trail(id, name, intensity, rating, distance));
+                        trails.add(new AddedTrail(id, name, distance, intensity, rating));
                     }
                 }
                 conn.close();
