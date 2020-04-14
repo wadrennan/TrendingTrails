@@ -92,7 +92,7 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
                     id = rs.getInt("trail_id");
                     name =  rs.getString("name");
                     dist = rs.getDouble("distance");
-                    Trail t = new Trail(id, name,0,0,dist);
+                    Trail t = new Trail(id, name,dist);
                     trailList.add(t);
                     rs.next();
                 }

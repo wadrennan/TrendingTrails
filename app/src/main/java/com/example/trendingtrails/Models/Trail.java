@@ -15,7 +15,7 @@ public class Trail implements Serializable {
         name = "";
         distance = 0;
     }
-    public Trail(int id, String name, int intense, int rate, double dist){
+    public Trail(int id, String name, double dist){
         this.id = id;
         this.name = name;
         distance = dist;

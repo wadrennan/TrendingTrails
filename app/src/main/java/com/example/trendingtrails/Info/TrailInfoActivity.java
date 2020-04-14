@@ -15,7 +15,9 @@ import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Map.MapExistingTrailActivity;
 import com.example.trendingtrails.Models.AddedTrail;
+import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Review;
+import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
 
 import java.sql.Connection;
@@ -27,21 +29,18 @@ import java.util.List;
 
 public class TrailInfoActivity extends AppCompatActivity {
     List<Review> reviews = new ArrayList<Review>();
+    Trail trail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_info);
-        final AddedTrail trail = (AddedTrail) getIntent().getSerializableExtra("Trail");
-        new TrailInfoTask().execute(Integer.toString(trail.id));
-        TextView name = findViewById(R.id.infoNameTxt);
-        TextView distance = findViewById(R.id.distanceTxt);
-        name.setText(trail.name);
-        distance.setText(String.format("%.2f", trail.distance) + " miles");
+        final int id = (int) getIntent().getSerializableExtra("Trail");
+        new TrailInfoTask().execute(Integer.toString(id));
         findViewById(R.id.infoMapBtn).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapExistingTrailActivity.class);
-                intent.putExtra("TRAIL_ID", trail.id);
+                intent.putExtra("TRAIL_ID", id);
                 startActivity(intent);
             }
         });
@@ -51,6 +50,10 @@ public class TrailInfoActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            TextView name = findViewById(R.id.infoNameTxt);
+            TextView distance = findViewById(R.id.distanceTxt);
+            name.setText(trail.name);
+            distance.setText(String.format("%.2f", trail.distance) + " miles");
             double rating = calculateRating(reviews);
             double intensity = calculateIntensity(reviews);
             TextView ratingText = findViewById(R.id.ratingNumTxt);
@@ -71,10 +74,10 @@ public class TrailInfoActivity extends AppCompatActivity {
                 ll.setBackground(getResources().getDrawable(R.drawable.border));
                 ll.setPadding(25, 25, 25, 25);
                 LinearLayout l1 = new LinearLayout(getApplicationContext());
-                TextView name = new TextView(getApplicationContext());
-                name.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                name.setLayoutParams(textParams);
-                name.setText("-"+review.name);
+                TextView nameLocal = new TextView(getApplicationContext());
+                nameLocal.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                nameLocal.setLayoutParams(textParams);
+                nameLocal.setText("-"+review.name);
                 TextView comment = new TextView(getApplicationContext());
                 comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 comment.setLayoutParams(textParams);
@@ -90,7 +93,7 @@ public class TrailInfoActivity extends AppCompatActivity {
                 ll.addView(ratingLocal);
                 ll.addView(intensityLocal);
                 ll.addView(comment);
-                ll.addView(name);
+                ll.addView(nameLocal);
                 lm.addView(ll);
             }
         }
@@ -118,11 +121,20 @@ public class TrailInfoActivity extends AppCompatActivity {
                 if (conn == null) {
                     return null;
                 } else {
-                    String query = "SELECT name, intensity, rating, review FROM CompletedTrails ct " +
-                            " JOIN Profile p on p.email = ct.email " +
-                            " where TrailId = " + params[0] + " ";
+                    String query = "SELECT trail_id, name, distance, lat, long FROM AllTrails t " +
+                            " where trail_id= " + params[0] + " ";
                     Statement stmt = conn.createStatement();
                     ResultSet rs = stmt.executeQuery(query);
+                    if (rs.next()) {
+                        int id = rs.getInt("trail_id");
+                        String name = rs.getString("name");
+                        double distance = rs.getDouble("distance");
+                        trail = new Trail(id, name, distance);
+                    }
+                    query = "SELECT name, intensity, rating, review FROM CompletedTrails ct " +
+                            " JOIN Profile p on p.email = ct.email " +
+                            " where TrailId = " + params[0] + " ";
+                    rs = stmt.executeQuery(query);
                     reviews.clear();
                     while (rs.next()) {
                         String name = rs.getString("name");
