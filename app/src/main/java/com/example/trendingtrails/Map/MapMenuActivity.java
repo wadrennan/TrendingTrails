@@ -14,6 +14,9 @@ import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -93,6 +96,9 @@ public class MapMenuActivity extends BaseActivity implements TrailsViewAdapter.O
                     id = rs.getInt("trail_id");
                     name =  rs.getString("name");
                     dist = rs.getDouble("distance");
+                    BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
+                    truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
+                    dist = truncatedDist.doubleValue();
                     Trail t = new Trail(id, name,dist);
                     trailList.add(t);
                     rs.next();
