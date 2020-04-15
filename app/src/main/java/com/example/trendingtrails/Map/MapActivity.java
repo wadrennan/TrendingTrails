@@ -7,18 +7,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Location.LocationTrack;
-import com.example.trendingtrails.Location.LocationsMenuActivity;
-import com.example.trendingtrails.Models.AccountInfo;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
@@ -29,10 +23,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.List;
 

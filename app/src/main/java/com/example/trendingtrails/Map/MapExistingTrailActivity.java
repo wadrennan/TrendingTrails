@@ -1,13 +1,19 @@
 package com.example.trendingtrails.Map;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Info.ReviewActivity;
+import com.example.trendingtrails.Location.LocationsMenuActivity;
+import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,10 +39,14 @@ public class MapExistingTrailActivity extends BaseActivity implements OnMapReady
     private String mPolyline;
     private double startLat;
     private double startLon;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         // Retrieve the content view that renders the map.
         conn = Database.connect();
         if(conn == null){
@@ -45,7 +55,7 @@ public class MapExistingTrailActivity extends BaseActivity implements OnMapReady
         }
         else{
             Intent i = getIntent();
-            int id = i.getIntExtra("TRAIL_ID", -1);
+            id = i.getIntExtra("TRAIL_ID", -1);
             if(id == -1){
                 System.out.println("Error: Default used for id in MapExistingTrail");
             }
@@ -58,6 +68,15 @@ public class MapExistingTrailActivity extends BaseActivity implements OnMapReady
         }
 
         setContentView(R.layout.activity_extisting_trail_map);
+        //Set onclick for completed trail button
+        findViewById(R.id.completed_trail).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               // askForReview();
+                Intent intent = new Intent(getBaseContext(), ReviewActivity.class);
+                intent.putExtra("TRAIL_ID", id);
+                startActivity(intent);
+            }
+        });
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -103,5 +122,37 @@ public class MapExistingTrailActivity extends BaseActivity implements OnMapReady
             mPolyline = polyline;
             System.out.println(mPolyline);
         }
+    }
+
+    private void askForReview(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Review");
+        builder.setMessage("Would you like to leave a review?");
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch(which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        // User clicked the Yes button
+                        Intent intent = new Intent(getBaseContext(), ReviewActivity.class);
+                        intent.putExtra("TRAIL_ID", id);
+                        startActivity(intent);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        // User clicked the No button
+                        System.out.println("Cancel Button Clicked");
+                        //TODO insert into completed trails
+                        break;
+                }
+            }
+        };
+        // add the buttons
+        builder.setPositiveButton("Yes", dialogClickListener);
+        builder.setNegativeButton("No", dialogClickListener);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

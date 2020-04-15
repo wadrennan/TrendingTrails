@@ -28,6 +28,7 @@ public class SaveTrailActivity extends MapActivity {
     private String encodedPoly;
     private double lat;
     private double lon;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Retrieve the content view that renders the map.
@@ -71,9 +72,9 @@ public class SaveTrailActivity extends MapActivity {
         String name = nameField.getText().toString();
         EditText comm = findViewById(R.id.comments);
         String comments = comm.getText().toString();
-       // double lat = lt.getLatitude();
+        //Fixed to take start point not endpoints
+        //double lat = lt.getLatitude();
         //double lng = lt.getLongitude();
-        //TODO This gets the current position or endpoint of the trail and saves it. We want to save the start point
         String query = " BEGIN TRANSACTION " +
                 " DECLARE @TrailId int; " +
                 " INSERT INTO AllTrails (name, lat, long, distance,encoded_polyline) " +
