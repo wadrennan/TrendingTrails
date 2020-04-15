@@ -96,6 +96,7 @@ public class MapMenuActivity extends BaseActivity implements TrailsViewAdapter.O
                     id = rs.getInt("trail_id");
                     name =  rs.getString("name");
                     dist = rs.getDouble("distance");
+                    //Truncate the decimal value
                     BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
                     truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
                     dist = truncatedDist.doubleValue();

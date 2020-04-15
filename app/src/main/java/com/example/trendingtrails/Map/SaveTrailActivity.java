@@ -26,12 +26,16 @@ public class SaveTrailActivity extends MapActivity {
     private Spinner ratingSpinner;
     private Spinner intensitySpinner;
     private String encodedPoly;
+    private double lat;
+    private double lon;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Retrieve the content view that renders the map.
         setContentView(R.layout.save_trail_form);
         distance = getIntent().getDoubleExtra("Distance",0);
         encodedPoly = getIntent().getStringExtra("encodedPoly");
+        lat = getIntent().getDoubleExtra("startLat",0);
+        lon = getIntent().getDoubleExtra("startLon",0);
         System.out.println("Distance = "+distance+"");
         lt = new LocationTrack(this);
         //fill spinners with values
@@ -67,12 +71,13 @@ public class SaveTrailActivity extends MapActivity {
         String name = nameField.getText().toString();
         EditText comm = findViewById(R.id.comments);
         String comments = comm.getText().toString();
-        double lat = lt.getLatitude();
-        double lng = lt.getLongitude();
+       // double lat = lt.getLatitude();
+        //double lng = lt.getLongitude();
+        //TODO This gets the current position or endpoint of the trail and saves it. We want to save the start point
         String query = " BEGIN TRANSACTION " +
                 " DECLARE @TrailId int; " +
                 " INSERT INTO AllTrails (name, lat, long, distance,encoded_polyline) " +
-                " Values ('"+name+"',"+lat+","+lng+","+distance+",'"+encodedPoly+"'); " + //TODO NOT DONE
+                " Values ('"+name+"',"+lat+","+lon+","+distance+",'"+encodedPoly+"'); " + //TODO NOT DONE
                 " SELECT @TrailId = scope_identity(); " +
                 " INSERT INTO AddedTrails (TrailId, email) " +
                 " VALUES (@TrailId, '" + AccountInfo.personEmail + "'); " +

@@ -184,6 +184,8 @@ public class MapActivity extends BaseActivity
                         Intent intent = new Intent(getBaseContext(),SaveTrailActivity.class);
                         intent.putExtra("Distance", dist);
                         intent.putExtra("encodedPoly", encodedPoly);
+                        intent.putExtra("startLat", pointList.get(0).latitude);
+                        intent.putExtra("startLon", pointList.get(0).longitude);
                         System.out.println(Global.AccountInfo.personEmail);
                         startActivity(intent);
 

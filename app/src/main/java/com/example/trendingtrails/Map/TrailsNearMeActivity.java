@@ -112,7 +112,7 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
             }
             catch(SQLException e){
                 System.out.println("Error in SELECT in TrailsNearMe");
-                sqlError();
+                //sqlError();
                 return null;
             }
         }
@@ -120,10 +120,15 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
         //Executes on UI thread after aync query and list generation is done
         @Override
         protected void onPostExecute(List<Trail> trailList){
-            super.onPostExecute(trailList);
-            TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, TrailsNearMeActivity.this);
-            trailCards.setAdapter(adapter);
-            trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            if(trailList == null){
+                Toast.makeText(getApplicationContext(), "No Trails within this distance!", Toast.LENGTH_LONG).show();
+            }
+            else {
+                super.onPostExecute(trailList);
+                TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, TrailsNearMeActivity.this);
+                trailCards.setAdapter(adapter);
+                trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            }
         }
     }
 
