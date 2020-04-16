@@ -10,6 +10,8 @@ public class Trail implements Serializable {
     public String name;
     public double distance; //miles
     public String encodedPolyline;
+    public double latitude;
+    public double longitude;
 
     public Trail(){
         name = "";
@@ -20,6 +22,14 @@ public class Trail implements Serializable {
         this.name = name;
         distance = dist;
     }
+    public Trail(int id, String name, double lat, double lon, String polyline){
+        this.id = id;
+        this.name = name;
+        latitude = lat;
+        longitude = lon;
+        encodedPolyline = polyline;
+    }
+
     public double getDistance(List<LatLng> pointList){
         if(distance != 0){
             //do nothing

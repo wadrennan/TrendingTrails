@@ -6,12 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.trendingtrails.BaseActivity;
+import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Trail;
@@ -22,15 +24,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MapActivity extends BaseActivity
-        implements OnMapReadyCallback{
+        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private GoogleApiClient googleApiClient;
     LocationTrack lt;  //Location Service
     private double lat; //latitude
@@ -39,7 +46,11 @@ public class MapActivity extends BaseActivity
     private boolean trackingFlag; // boolean to tell receiver when to call the update Points Function
     LocationReciever broadReceiver; //Receives broadcasts from Location Service
     private List<LatLng> pointList;
+    private List<Trail> trails;
     public Trail trail;
+    Polyline mPolyline;
+    protected int trailId;
+    private boolean init = true;
 
 
     @Override
@@ -48,6 +59,8 @@ public class MapActivity extends BaseActivity
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_map);
         checkLocationPermissions();
+        Intent i = getIntent();
+        trailId = i.getIntExtra("trailId", -1);
         lt = new LocationTrack(MapActivity.this);
         if (lt.canGetLocation()) {
             System.out.println("Can get location");
@@ -72,7 +85,7 @@ public class MapActivity extends BaseActivity
         });
         findViewById(R.id.finish_tracking).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(trackingFlag == true) {
+                if (trackingFlag == true) {
                     trackingFlag = false;
                     drawTrail();
                 }
@@ -83,8 +96,6 @@ public class MapActivity extends BaseActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
     /**
@@ -102,52 +113,76 @@ public class MapActivity extends BaseActivity
         System.out.println(lat);
         System.out.println(lon);
         map = googleMap;
+        new MapTasks().execute();
         LatLng sydney = new LatLng(lat, lon);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
-                .title("Your Current Location"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         googleMap.setMyLocationEnabled(true);
-
+        googleMap.setOnMarkerClickListener(this);
     }
 
+    /**
+     * Called when the user clicks a marker.
+     */
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        // Retrieve the data from the marker.
+        int id = (int) marker.getTag();
+        Trail t = null;
+        for (Trail trail : trails) {
+            t = trail;
+            if (trail.id == id)
+                break;
+        }
+        if (t == null)
+            return false;
+        List<LatLng> path = PolyUtil.decode(t.encodedPolyline);
+        PolylineOptions pathOptions = new PolylineOptions().addAll(path);
+        if (mPolyline != null)
+            mPolyline.remove();
+        mPolyline = map.addPolyline(pathOptions);
 
+        // Return false to indicate that we have not consumed the event and that we wish
+        // for the default behavior to occur (which is for the camera to move such that the
+        // marker is centered and for the marker's info window to open, if it has one).
+        return false;
+    }
 
     protected void onDestroy() {
         super.onDestroy();
         lt.stopListener();
         unregisterReceiver(broadReceiver);
     }
-    private void updateMap(GoogleMap googleMap){
+
+    private void updateMap(GoogleMap googleMap) {
         System.out.println("Update Map");
         LatLng sydney = new LatLng(lat, lon);
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,10));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
     }
-    public class LocationReciever extends BroadcastReceiver{
+
+    public class LocationReciever extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             System.out.println("In receive");
-            if(intent.getAction().equals("LocationData"))
-            {
+            if (intent.getAction().equals("LocationData")) {
                 System.out.println("Receiving Broadcast");
-                lat = intent.getDoubleExtra("lat",0);
-                lon = intent.getDoubleExtra("lng", 0);
-                updateMap(map);
+                double currentLat = intent.getDoubleExtra("lat", 0);
+                double currentLon = intent.getDoubleExtra("lng", 0);
 
                 //Are we tracking for a trail? if so we add the points to be used when the tracking is finished
-                if(trackingFlag == true){
-                    LatLng pt = new LatLng(lat, lon);
+                if (trackingFlag == true) {
+                    LatLng pt = new LatLng(currentLat, currentLon);
                     pointList.add(pt);
                 }
             }
         }
     }
 
-    private void drawTrail(){
+    private void drawTrail() {
         PolylineOptions polylineOptions = new PolylineOptions();
         System.out.println(pointList);
         String encodedPoly = PolyUtil.encode(pointList);
-        System.out.println("Encoded polyline = "+encodedPoly+"");
+        System.out.println("Encoded polyline = " + encodedPoly + "");
 // Create polyline options with existing LatLng ArrayList
         polylineOptions.addAll(pointList);
         polylineOptions
@@ -156,25 +191,25 @@ public class MapActivity extends BaseActivity
         map.addPolyline(polylineOptions);
         trail = new Trail();
         double dist = trail.getDistance(pointList);
-        System.out.println("dist is " +dist+"");
+        System.out.println("dist is " + dist + "");
 
         askToSave(dist, encodedPoly);
     }
 
 
-    private void askToSave(final double dist, final String encodedPoly){
+    private void askToSave(final double dist, final String encodedPoly) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Would you like to save?");
-        builder.setMessage("Your total distance was "+dist+" miles. Would you like to save this trail?");
+        builder.setMessage("Your total distance was " + dist + " miles. Would you like to save this trail?");
 
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch(which){
+                switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         // User clicked the Yes button
                         System.out.println("Save Button Clicked");
-                        Intent intent = new Intent(getBaseContext(),SaveTrailActivity.class);
+                        Intent intent = new Intent(getBaseContext(), SaveTrailActivity.class);
                         intent.putExtra("Distance", dist);
                         intent.putExtra("encodedPoly", encodedPoly);
                         intent.putExtra("startLat", pointList.get(0).latitude);
@@ -200,6 +235,52 @@ public class MapActivity extends BaseActivity
         // create and show the alert dialog
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public class MapTasks extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            for (Trail trail : trails) {
+                Marker mark = map.addMarker(new MarkerOptions().position(new LatLng(trail.latitude, trail.longitude))
+                        .title(trail.name));
+                mark.setTag(trail.id);
+            }
+            updateMap(map);
+
         }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Connection conn = Database.connect();
+                if (conn == null) {
+                    return null;
+                } else {
+                    String query = "SELECT trail_id, name, lat, long, encoded_polyline FROM AllTrails";
+                    Statement stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery(query);
+                    trails = new ArrayList<>();
+                    while (rs.next()) {
+                        int id = rs.getInt("trail_id");
+                        String name = rs.getString("name");
+                        double latitude = rs.getDouble("lat");
+                        double longitude = rs.getDouble("long");
+                        String polyline = rs.getString("encoded_polyline");
+                        if (trailId == id) {
+                            lat = latitude;
+                            lon = longitude;
+                        }
+
+                        trails.add(new Trail(id, name, latitude, longitude, polyline));
+                    }
+                }
+                conn.close();
+            } catch (Exception ex) {
+                return null;
+            }
+            return null;
+        }
+    }
 
 }
