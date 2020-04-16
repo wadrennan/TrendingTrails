@@ -47,6 +47,8 @@
         <activity android:name=".Map.TrailsNearMeActivity" />
         <activity android:name=".Map.MapExistingTrailActivity"></activity>
         <activity android:name=".Info.ReviewActivity"></activity>
+        <activity android:name=".Weather.WeatherMenuActivity">
+        </activity>
     </application>
 
 </manifest>

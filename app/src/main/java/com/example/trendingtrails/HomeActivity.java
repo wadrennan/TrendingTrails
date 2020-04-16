@@ -13,6 +13,7 @@ import com.example.trendingtrails.Map.TrailsNearMeActivity;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.User;
 import com.example.trendingtrails.Profile.ProfileActivity;
+import com.example.trendingtrails.Weather.WeatherMenuActivity;
 import com.squareup.picasso.Picasso;
 
 import java.sql.Connection;
@@ -31,7 +32,7 @@ public class HomeActivity extends BaseActivity {
         setContentView(R.layout.activity_home);
         findViewById(R.id.weatherButton).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                        Intent activityIntent = new Intent(getBaseContext(), LocationsMenuActivity.class);
+                        Intent activityIntent = new Intent(getBaseContext(), WeatherMenuActivity.class);
                         startActivity(activityIntent);
             }
         });
