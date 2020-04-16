@@ -99,7 +99,7 @@ public class CompletedTrailsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getContext(), TrailInfoActivity.class);
-                        intent.putExtra("Trail", trail.id);
+                        intent.putExtra("TRAIL_ID", trail.id);
                         startActivity(intent);
                     }
                 });

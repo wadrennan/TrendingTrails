@@ -60,7 +60,7 @@ public class MapActivity extends BaseActivity
         setContentView(R.layout.activity_map);
         checkLocationPermissions();
         Intent i = getIntent();
-        trailId = i.getIntExtra("trailId", -1);
+        trailId = i.getIntExtra("TRAIL_ID", -1);
         lt = new LocationTrack(MapActivity.this);
         if (lt.canGetLocation()) {
             System.out.println("Can get location");

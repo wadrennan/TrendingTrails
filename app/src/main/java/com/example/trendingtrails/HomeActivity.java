@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Map.MapMenuActivity;
+import com.example.trendingtrails.Map.TrailsNearMeActivity;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.User;
 import com.example.trendingtrails.Profile.ProfileActivity;
@@ -40,6 +41,19 @@ public class HomeActivity extends BaseActivity {
                         Intent activityIntent = new Intent(getBaseContext(), MapMenuActivity.class);
                         startActivity(activityIntent);
                 }
+        });
+        findViewById(R.id.trailsNearMeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent activityIntent = new Intent(getBaseContext(), TrailsNearMeActivity.class);
+                startActivity(activityIntent);
+            }
+        });
+        findViewById(R.id.leaderboardButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
         });
         findViewById(R.id.profileLayout).setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){

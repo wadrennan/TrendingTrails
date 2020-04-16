@@ -9,13 +9,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Database;
-import com.example.trendingtrails.Location.LocationsMenuActivity;
+import com.example.trendingtrails.Map.MapActivity;
 import com.example.trendingtrails.Map.MapExistingTrailActivity;
-import com.example.trendingtrails.Models.AddedTrail;
-import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Review;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
@@ -27,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrailInfoActivity extends AppCompatActivity {
+public class TrailInfoActivity extends BaseActivity {
     List<Review> reviews = new ArrayList<Review>();
     Trail trail;
 
@@ -35,11 +32,11 @@ public class TrailInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_info);
-        final int id = (int) getIntent().getSerializableExtra("Trail");
+        final int id = (int) getIntent().getSerializableExtra("TRAIL_ID");
         new TrailInfoTask().execute(Integer.toString(id));
         findViewById(R.id.infoMapBtn).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapExistingTrailActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                 intent.putExtra("TRAIL_ID", id);
                 startActivity(intent);
             }

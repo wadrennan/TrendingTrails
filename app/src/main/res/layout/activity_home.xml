@@ -22,11 +22,10 @@
         android:id="@+id/weatherCaption"
         android:layout_width="118dp"
         android:layout_height="49dp"
-        android:layout_marginEnd="40dp"
         android:text="Weather Forecast"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/weatherButton"
         app:layout_constraintTop_toBottomOf="@+id/weatherButton" />
 
     <ImageButton
@@ -45,12 +44,22 @@
         android:id="@+id/mapCaption"
         android:layout_width="119dp"
         android:layout_height="48dp"
-        android:layout_marginStart="44dp"
         android:text="Map"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/mapButton"
         app:layout_constraintTop_toBottomOf="@+id/mapButton" />
+
+    <ImageButton
+        android:id="@+id/trailsNearMeButton"
+        android:layout_width="118dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/roundicon"
+        android:cropToPadding="false"
+        app:layout_constraintStart_toStartOf="@+id/mapButton"
+        app:layout_constraintTop_toBottomOf="@+id/mapCaption"
+        app:srcCompat="@drawable/nearmeicon" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profileLayout"
@@ -91,4 +100,35 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/leaderboardButton"
+        android:layout_width="118dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/roundicon"
+        android:cropToPadding="false"
+        app:layout_constraintEnd_toEndOf="@+id/weatherButton"
+        app:layout_constraintTop_toBottomOf="@+id/weatherCaption"
+        app:srcCompat="@drawable/leadericon" />
+
+    <TextView
+        android:id="@+id/trailsNearMeCaption"
+        android:layout_width="115dp"
+        android:layout_height="67dp"
+        android:text="Trails Near Me"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/trailsNearMeButton"
+        app:layout_constraintTop_toBottomOf="@+id/trailsNearMeButton" />
+
+    <TextView
+        android:id="@+id/leaderboardCaption"
+        android:layout_width="118dp"
+        android:layout_height="66dp"
+        android:text="Leaderboard"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/leaderboardButton"
+        app:layout_constraintTop_toBottomOf="@+id/leaderboardButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

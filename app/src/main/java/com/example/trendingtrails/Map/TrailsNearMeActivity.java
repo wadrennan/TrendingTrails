@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Info.TrailInfoActivity;
 import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
@@ -77,7 +78,7 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
         String id = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.id_number)).getText().toString();
         int id_num = Integer.parseInt(id);
         System.out.println("Trail id "+id_num+" clicked!");
-        Intent intent = new Intent(this, MapExistingTrailActivity.class);
+        Intent intent = new Intent(this, TrailInfoActivity.class);
         intent.putExtra("TRAIL_ID", id_num);
         startActivity(intent);
        // String name = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.trail_name)).getText().toString();

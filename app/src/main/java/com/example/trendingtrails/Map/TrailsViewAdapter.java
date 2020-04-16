@@ -1,6 +1,7 @@
 package com.example.trendingtrails.Map;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +21,16 @@ public class TrailsViewAdapter extends RecyclerView.Adapter<TrailsViewAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView name;
         public TextView distance;
-        public Button mapTrail;
         OnMapListener onMapListener;
         public TextView id;
 
         public ViewHolder(View itemView, OnMapListener onMapListener){
             super(itemView);
+            itemView.setOnClickListener(this);
             name = (TextView) itemView.findViewById(R.id.trail_name);
             distance = (TextView) itemView.findViewById(R.id.distance);
-            mapTrail = (Button) itemView.findViewById(R.id.map_trail);
             id = itemView.findViewById(R.id.id_number);
             this.onMapListener = onMapListener;
-            mapTrail.setOnClickListener(this);
         }
 
         @Override
