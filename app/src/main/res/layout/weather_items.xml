@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/white_border"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="#707574">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="194dp">
+            android:layout_height="129dp">
 
             <TextView
                 android:id="@+id/zip_label"
@@ -24,6 +26,7 @@
                 android:layout_marginBottom="85dp"
                 android:text="Zip Code:"
                 android:textAlignment="center"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -34,12 +37,13 @@
                 android:id="@+id/zip_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="67dp"
-                android:layout_marginTop="85dp"
-                android:layout_marginEnd="129dp"
-                android:layout_marginBottom="85dp"
+                android:layout_marginStart="113dp"
+                android:layout_marginTop="53dp"
+                android:layout_marginEnd="79dp"
+                android:layout_marginBottom="52dp"
                 android:text="zipcode"
                 android:textAlignment="center"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

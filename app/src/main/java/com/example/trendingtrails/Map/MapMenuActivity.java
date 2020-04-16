@@ -108,7 +108,7 @@ public class MapMenuActivity extends BaseActivity implements TrailsViewAdapter.O
             }
             catch(SQLException e){
                 System.out.println("Error in SELECT in MapMenu");
-                sqlError();
+               // sqlError();
                 return null;
             }
         }
@@ -116,10 +116,15 @@ public class MapMenuActivity extends BaseActivity implements TrailsViewAdapter.O
         //Executes on UI thread after aync query and list generation is done
         @Override
         protected void onPostExecute(List<Trail> trailList){
-            super.onPostExecute(trailList);
-            TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, MapMenuActivity.this);
-            trailCards.setAdapter(adapter);
-            trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            if(trailList == null){
+                System.out.println("null popular trails");
+            }
+            else {
+                super.onPostExecute(trailList);
+                TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, MapMenuActivity.this);
+                trailCards.setAdapter(adapter);
+                trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            }
         }
     }
 
