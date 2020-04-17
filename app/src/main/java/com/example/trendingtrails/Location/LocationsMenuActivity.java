@@ -79,7 +79,7 @@ public class LocationsMenuActivity extends BaseActivity {
         findViewById(R.id.location1_forecast).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(code1 != null){
+                if (code1 != null) {
                     Intent intent = new Intent(getApplicationContext(), WeatherActivity.class);
                     intent.putExtra("zip", code1);
                     startActivity(intent);
@@ -90,9 +90,9 @@ public class LocationsMenuActivity extends BaseActivity {
         findViewById(R.id.location2_forecast).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(code2 != null){
+                if (code2 != null) {
                     Intent intent = new Intent(getApplicationContext(), WeatherActivity.class);
-                    intent.putExtra("zip",code2);
+                    intent.putExtra("zip", code2);
                     startActivity(intent);
                 }
             }
@@ -116,7 +116,7 @@ public class LocationsMenuActivity extends BaseActivity {
     }
 
     @Override
-    protected  void onResume(){
+    protected void onResume() {
         super.onResume();
         new ZipCodeTasks().execute();
     }
@@ -124,7 +124,7 @@ public class LocationsMenuActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(locationTrack != null)
+        if (locationTrack != null)
             locationTrack.stopListener();
     }
 
@@ -141,20 +141,18 @@ public class LocationsMenuActivity extends BaseActivity {
         }
     }
 
-    public class ZipCodeTasks extends AsyncTask<String,String,String>
-    {
+    public class ZipCodeTasks extends AsyncTask<String, String, String> {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             TextView location1 = findViewById(R.id.location1);
             Button location1Btn = findViewById(R.id.location1_forecast);
             Button delete1Btn = findViewById(R.id.location1_delete);
-            if(code1 != null) {
+            if (code1 != null) {
                 location1.setText("Zip Code: " + code1);
                 location1Btn.setVisibility(View.VISIBLE);
                 delete1Btn.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 location1.setText("Location 1");
                 location1Btn.setVisibility(View.INVISIBLE);
                 delete1Btn.setVisibility(View.INVISIBLE);
@@ -163,12 +161,11 @@ public class LocationsMenuActivity extends BaseActivity {
             Button location2Btn = findViewById(R.id.location2_forecast);
             Button delete2Btn = findViewById(R.id.location2_delete);
 
-            if(code2 != null){
+            if (code2 != null) {
                 location2.setText("Zip Code: " + code2);
                 location2Btn.setVisibility(View.VISIBLE);
                 delete2Btn.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 location2.setText("Location 2");
                 location2Btn.setVisibility(View.INVISIBLE);
                 delete2Btn.setVisibility(View.INVISIBLE);
@@ -176,35 +173,27 @@ public class LocationsMenuActivity extends BaseActivity {
         }
 
         @Override
-        protected String doInBackground(String... params)
-        {
-            try
-            {
+        protected String doInBackground(String... params) {
+            try {
                 Connection conn = Database.connect();
-                if (conn == null)
-                {
+                if (conn == null) {
                     return null;
-                }
-                else
-                {
+                } else {
                     String query = "Select code from [dbo].[ZipCodes] where email= '" + Global.AccountInfo.personEmail + "' " +
                             " Order by id desc ";
                     Statement stmt = conn.createStatement();
                     ResultSet rs = stmt.executeQuery(query);
                     code1 = null;
                     code2 = null;
-                    if(rs.next())
-                    {
+                    if (rs.next()) {
                         code1 = rs.getString("code");
-                        if(rs.next()){
+                        if (rs.next()) {
                             code2 = rs.getString("code");
                         }
                     }
                 }
                 conn.close();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 return null;
             }
             return null;

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.trendingtrails.BaseActivity;
+import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
@@ -56,12 +57,7 @@ public class MapMenuActivity extends BaseActivity implements TrailsViewAdapter.O
             sqlError();
         }
         else{
-            String query = "SELECT trail_id, name, distance FROM AllTrails t " +
-                    " JOIN CompletedTrails ct " +
-                    "ON ct.TrailId = t.trail_id " +
-                    "GROUP BY trail_id, name, distance " +
-                    "HAVING AVG(rating) > 6";
-           new QueryDb().execute(query);
+           new QueryDb().execute();
         }
     }
 
@@ -85,26 +81,7 @@ public class MapMenuActivity extends BaseActivity implements TrailsViewAdapter.O
         @Override
         protected List<Trail> doInBackground(String... query){
             try {
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(query[0]);
-                List<Trail> trailList = new ArrayList<>();
-                rs.next();
-                int id;
-                String name;
-                double dist;
-                while(!rs.isAfterLast()){
-                    id = rs.getInt("trail_id");
-                    name =  rs.getString("name");
-                    dist = rs.getDouble("distance");
-                    //Truncate the decimal value
-                    BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
-                    truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
-                    dist = truncatedDist.doubleValue();
-                    Trail t = new Trail(id, name,dist);
-                    trailList.add(t);
-                    rs.next();
-                }
-                return trailList;
+                return Queries.getPopularTrails(conn);
             }
             catch(SQLException e){
                 System.out.println("Error in SELECT in MapMenu");
@@ -116,7 +93,7 @@ public class MapMenuActivity extends BaseActivity implements TrailsViewAdapter.O
         //Executes on UI thread after aync query and list generation is done
         @Override
         protected void onPostExecute(List<Trail> trailList){
-            if(trailList == null){
+            if(trailList.isEmpty()){
                 System.out.println("null popular trails");
             }
             else {

@@ -6,6 +6,8 @@ import com.example.trendingtrails.Models.Review;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.Models.User;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,9 +15,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.trendingtrails.Models.Global.AccountInfo;
+
 public class Queries {
     public static void insertUser(Connection conn, User user) throws SQLException {
-        String query = "INSERT INTO [dbo].[Profile] (email, name, experience) VALUES ('" + user.email + "', '" + user.displayName +"', "+ user.rank + ") ";
+        String query = "INSERT INTO [dbo].[Profile] (email, name, experience) VALUES ('" + user.email + "', '" + user.displayName + "', " + user.rank + ") ";
         Statement stmt = conn.createStatement();
         stmt.execute(query);
     }
@@ -25,9 +29,9 @@ public class Queries {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         User user = new User();
-        if(rs.next()){
+        if (rs.next()) {
             user.email = rs.getString("email");
-            user.displayName =  rs.getString("name");
+            user.displayName = rs.getString("name");
             user.rank = rs.getInt("experience");
             return user;
         }
@@ -53,7 +57,7 @@ public class Queries {
         return null;
     }
 
-    public static List<Trail> getTrails(Connection conn) throws SQLException{
+    public static List<Trail> getTrails(Connection conn) throws SQLException {
         String query = "SELECT trail_id, name, lat, long, encoded_polyline FROM AllTrails";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -124,5 +128,103 @@ public class Queries {
             trails.add(new AddedTrail(id, name, distance, intensity, rating));
         }
         return trails;
+    }
+
+    public static void insertLocation(Connection conn, String zipCode) {
+        String query = " INSERT INTO ZipCodes (code, email) " +
+                " Values ('" + zipCode + "','" + AccountInfo.personEmail + "')";
+
+        System.out.println(query);
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (Exception e) {
+            System.out.println("Error in adding Location");
+            System.out.println(e);
+        }
+    }
+
+    public static List<Integer> getZipCodes(Connection conn) throws SQLException {
+        String query = "SELECT code FROM ZipCodes WHERE email='"+ Global.AccountInfo.personEmail+"';";
+        System.out.println(query);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        List<Integer> zipList = new ArrayList<>();
+        rs.next();
+        while(!rs.isAfterLast()){
+            int z = rs.getInt("code");
+            zipList.add(z);
+            rs.next();
+        }
+        return zipList;
+    }
+
+    public static void insertNewTrail(Connection conn, String name, double lat, double lon, double distance, String encodedPoly, int rating, int intensity, String comments){
+        String query = " BEGIN TRANSACTION " +
+                " DECLARE @TrailId int; " +
+                " INSERT INTO AllTrails (name, lat, long, distance,encoded_polyline) " +
+                " Values ('"+name+"',"+lat+","+lon+","+distance+",'"+encodedPoly+"'); " + //TODO NOT DONE
+                " SELECT @TrailId = scope_identity(); " +
+                " INSERT INTO AddedTrails (TrailId, email) " +
+                " VALUES (@TrailId, '" + AccountInfo.personEmail + "'); " +
+                " INSERT INTO CompletedTrails (TrailId, email, rating, intensity, review, date) " +
+                " VALUES (@TrailId, '" + AccountInfo.personEmail + "',"+rating+","
+                +intensity+",'"+comments+"', CURRENT_TIMESTAMP); "+
+                " COMMIT";
+
+        System.out.println(query);
+        try {
+            System.out.println("trying to execute");
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+
+        }
+        catch(Exception e){
+            System.out.println("Error in saveTrail");
+            System.out.println(e);
+        }
+    }
+
+    public static void insertCompletedTrail(Connection conn, int id, int rating, int intensity, String comments){
+        String query = " INSERT INTO CompletedTrails (TrailId, email, rating, intensity, review, date) " +
+                " VALUES ("+id+", '" + AccountInfo.personEmail + "',"+rating+","
+                +intensity+",'"+comments+"', CURRENT_TIMESTAMP);";
+        System.out.println(query);
+        try{
+            Statement stmt = conn.createStatement();
+            //ResultSet rs = stmt.executeQuery(query);
+            stmt.execute(query);
+        }
+        catch(SQLException e){
+            System.out.println("Error in review insert");
+        }
+    }
+
+    public static List<Trail> getPopularTrails(Connection conn) throws SQLException {
+        String query = "SELECT trail_id, name, distance FROM AllTrails t " +
+                " JOIN CompletedTrails ct " +
+                "ON ct.TrailId = t.trail_id " +
+                "GROUP BY trail_id, name, distance " +
+                "HAVING AVG(rating) > 6";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        List<Trail> trailList = new ArrayList<>();
+        rs.next();
+        int id;
+        String name;
+        double dist;
+        while(!rs.isAfterLast()){
+            id = rs.getInt("trail_id");
+            name =  rs.getString("name");
+            dist = rs.getDouble("distance");
+            //Truncate the decimal value
+            BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
+            truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
+            dist = truncatedDist.doubleValue();
+            Trail t = new Trail(id, name,dist);
+            trailList.add(t);
+            rs.next();
+        }
+        return trailList;
     }
 }
