@@ -12,17 +12,13 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Info.TrailInfoActivity;
 import com.example.trendingtrails.Models.AddedTrail;
-import com.example.trendingtrails.Models.Global;
-import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
 
-import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +33,7 @@ import java.util.List;
 public class CompletedTrailsFragment extends Fragment {
     Connection conn;
     List<AddedTrail> trails = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_completed_trails, container, false);
@@ -49,12 +46,12 @@ public class CompletedTrailsFragment extends Fragment {
         new CompletedTrailTasks().execute();
     }
 
-    public class CompletedTrailTasks extends AsyncTask<String,String,String> {
+    public class CompletedTrailTasks extends AsyncTask<String, String, String> {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             LinearLayout lm = getView().findViewById(R.id.ctLayout);
-            if(lm == null)
+            if (lm == null)
                 return;
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -62,7 +59,7 @@ public class CompletedTrailsFragment extends Fragment {
             LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             textParams.setMargins(10, 0, 0, 0);
-            for (final AddedTrail trail: trails) {
+            for (final AddedTrail trail : trails) {
                 LinearLayout ll = new LinearLayout(getView().getContext());
                 ll.setLayoutParams(params);
                 ll.setOrientation(LinearLayout.VERTICAL);
@@ -81,10 +78,9 @@ public class CompletedTrailsFragment extends Fragment {
                 intensity.setLayoutParams(textParams);
                 if (trail.intensity < 4) {
                     intensity.setText("Easy");
-                } else if (trail.intensity < 8){
+                } else if (trail.intensity < 8) {
                     intensity.setText("Medium");
-                }
-                else{
+                } else {
                     intensity.setText("Hard");
                 }
                 TextView rating = new TextView(getView().getContext());
@@ -113,23 +109,8 @@ public class CompletedTrailsFragment extends Fragment {
                 conn = Database.connect();
                 if (conn == null) {
                     return null;
-                }
-                else {
-                    String query = "SELECT trail_id, name, intensity, rating, distance, lat, long FROM AllTrails t " +
-                            " JOIN CompletedTrails ct " +
-                            " ON ct.TrailId = t.trail_id " +
-                            " where email= '" + Global.AccountInfo.personEmail + "' ";
-                    Statement stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery(query);
-                    trails.clear();
-                    while (rs.next()) {
-                        int id = rs.getInt("trail_id");
-                        String name = rs.getString("name");
-                        int intensity = rs.getInt("intensity");
-                        int rating = rs.getInt("rating");
-                        double distance = rs.getDouble("distance");
-                        trails.add(new AddedTrail(id, name, distance, intensity, rating));
-                    }
+                } else {
+                    trails = Queries.getCompletedTrails(conn);
                 }
                 conn.close();
             } catch (Exception ex) {

@@ -13,6 +13,7 @@ import android.view.View;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.trendingtrails.BaseActivity;
+import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Info.ReviewActivity;
 import com.example.trendingtrails.Location.LocationTrack;
@@ -285,6 +286,10 @@ public class MapActivity extends BaseActivity
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             for (Trail trail : trails) {
+                if (trailId == trail.id) {
+                    lat = trail.latitude;
+                    lon = trail.longitude;
+                }
                 Marker mark = map.addMarker(new MarkerOptions().position(new LatLng(trail.latitude, trail.longitude))
                         .title(trail.name));
                 mark.setTag(trail.id);
@@ -300,23 +305,7 @@ public class MapActivity extends BaseActivity
                 if (conn == null) {
                     return null;
                 } else {
-                    String query = "SELECT trail_id, name, lat, long, encoded_polyline FROM AllTrails";
-                    Statement stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery(query);
-                    trails = new ArrayList<>();
-                    while (rs.next()) {
-                        int id = rs.getInt("trail_id");
-                        String name = rs.getString("name");
-                        double latitude = rs.getDouble("lat");
-                        double longitude = rs.getDouble("long");
-                        String polyline = rs.getString("encoded_polyline");
-                        if (trailId == id) {
-                            lat = latitude;
-                            lon = longitude;
-                        }
-
-                        trails.add(new Trail(id, name, latitude, longitude, polyline));
-                    }
+                    trails = Queries.getTrails(conn);
                 }
                 conn.close();
             } catch (Exception ex) {

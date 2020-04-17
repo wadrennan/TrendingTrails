@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.R;
 
@@ -74,7 +75,7 @@ public class UserInfoFragment extends Fragment {
                 conn.close();
                 return;
             }
-            Database.updateUser(conn, newName, newExp, User);
+            Queries.updateUser(conn, newName, newExp, User);
             Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT).show();
             User.displayName = newName;
             User.rank = newExp;

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Map.MapActivity;
 import com.example.trendingtrails.Map.MapMenuActivity;
@@ -108,13 +109,13 @@ public class HomeActivity extends BaseActivity {
                 }
                 else
                 {
-                    User = Database.getUser(conn, AccountInfo.personEmail);
+                    User = Queries.getUser(conn, AccountInfo.personEmail);
                     if(User == null)
                     {
                         String name = Global.AccountInfo.personGivenName + " " + Global.AccountInfo.personFamilyName;
                         int rank = 0;
                         User = new User(AccountInfo.personEmail, name, rank);
-                        Database.insertUser(conn, User);
+                        Queries.insertUser(conn, User);
                     }
                 }
                 conn.close();

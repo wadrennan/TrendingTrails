@@ -41,30 +41,4 @@ public class Database {
         }
         return connection;
     }
-
-    public static void insertUser(Connection conn, User user) throws SQLException {
-        String query = "INSERT INTO [dbo].[Profile] (email, name, experience) VALUES ('" + user.email + "', '" + user.displayName +"', "+ user.rank + ") ";
-        Statement stmt = conn.createStatement();
-        stmt.execute(query);
-    }
-
-    public static User getUser(Connection conn, String email) throws SQLException {
-        String query = "SELECT email, name, experience FROM [dbo].[Profile] WHERE email = '" + email + "'";
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(query);
-        User user = new User();
-        if(rs.next()){
-             user.email = rs.getString("email");
-             user.displayName =  rs.getString("name");
-             user.rank = rs.getInt("experience");
-             return user;
-        }
-        return null;
-    }
-
-    public static void updateUser(Connection conn, String name, int exp, User user) throws SQLException {
-        String query = "Update [dbo].[Profile] SET name = '" + name + "', experience = " + exp + " where email= '" + user.email + "' ";
-        Statement stmt = conn.createStatement();
-        stmt.executeUpdate(query);
-    }
 }

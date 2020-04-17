@@ -3,26 +3,21 @@ package com.example.trendingtrails.Info;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trendingtrails.BaseActivity;
+import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Map.MapActivity;
-import com.example.trendingtrails.Map.MapExistingTrailActivity;
 import com.example.trendingtrails.Models.Review;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,28 +97,8 @@ public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdap
                 if (conn == null) {
                     return null;
                 } else {
-                    String query = "SELECT trail_id, name, distance, lat, long FROM AllTrails t " +
-                            " where trail_id= " + params[0] + " ";
-                    Statement stmt = conn.createStatement();
-                    ResultSet rs = stmt.executeQuery(query);
-                    if (rs.next()) {
-                        int id = rs.getInt("trail_id");
-                        String name = rs.getString("name");
-                        double distance = rs.getDouble("distance");
-                        trail = new Trail(id, name, distance);
-                    }
-                    query = "SELECT name, intensity, rating, review FROM CompletedTrails ct " +
-                            " JOIN Profile p on p.email = ct.email " +
-                            " where TrailId = " + params[0] + " ";
-                    rs = stmt.executeQuery(query);
-                    reviews.clear();
-                    while (rs.next()) {
-                        String name = rs.getString("name");
-                        int intensity = rs.getInt("intensity");
-                        int rating = rs.getInt("rating");
-                        String review = rs.getString("review");
-                        reviews.add(new Review(name, intensity, rating, review));
-                    }
+                    trail = Queries.getTrail(conn, Integer.parseInt(params[0]));
+                    reviews = Queries.getReviews(conn, Integer.parseInt(params[0]));
                 }
                 conn.close();
             } catch (Exception ex) {
