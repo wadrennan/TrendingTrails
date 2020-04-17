@@ -69,8 +69,8 @@ public class TrailInfoViewAdapter extends RecyclerView.Adapter<TrailInfoViewAdap
         viewHolder.rating.setRating(reviewList.get(position).rating);
         viewHolder.intensity.setProgress(reviewList.get(position).intensity * 10);
         if(reviewList.get(position).review.trim().isEmpty()) {
-            viewHolder.review.setVisibility(View.INVISIBLE);
-            viewHolder.reviewLabel.setVisibility(View.INVISIBLE);
+            viewHolder.review.setVisibility(View.GONE);
+            viewHolder.reviewLabel.setVisibility(View.GONE);
         }
         else
             viewHolder.review.setText(reviewList.get(position).review + "\n-"+reviewList.get(position).name);

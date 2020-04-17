@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Info.ReviewActivity;
 import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Trail;
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapActivity extends BaseActivity
-        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+        implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
     private GoogleApiClient googleApiClient;
     LocationTrack lt;  //Location Service
     private double lat; //latitude
@@ -81,6 +82,8 @@ public class MapActivity extends BaseActivity
             public void onClick(View v) {
                 trackingFlag = true;
                 pointList = new ArrayList<>();
+                findViewById(R.id.start_tracking).setVisibility(View.INVISIBLE);
+                findViewById(R.id.finish_tracking).setVisibility(View.VISIBLE);
             }
         });
         findViewById(R.id.finish_tracking).setOnClickListener(new View.OnClickListener() {
@@ -88,7 +91,16 @@ public class MapActivity extends BaseActivity
                 if (trackingFlag == true) {
                     trackingFlag = false;
                     drawTrail();
+                    findViewById(R.id.start_tracking).setVisibility(View.VISIBLE);
+                    findViewById(R.id.finish_tracking).setVisibility(View.INVISIBLE);
                 }
+            }
+        });
+        findViewById(R.id.completed_trail).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), ReviewActivity.class);
+                intent.putExtra("TRAIL_ID", trailId);
+                startActivity(intent);
             }
         });
         // Get the SupportMapFragment and request notification
@@ -118,6 +130,7 @@ public class MapActivity extends BaseActivity
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerClickListener(this);
+        googleMap.setOnMapClickListener(this);
     }
 
     /**
@@ -133,18 +146,22 @@ public class MapActivity extends BaseActivity
             if (trail.id == id)
                 break;
         }
-        if (t == null)
-            return false;
+        trailId = t.id;
         List<LatLng> path = PolyUtil.decode(t.encodedPolyline);
         PolylineOptions pathOptions = new PolylineOptions().addAll(path);
         if (mPolyline != null)
             mPolyline.remove();
         mPolyline = map.addPolyline(pathOptions);
-
+        findViewById(R.id.completed_trail).setVisibility(View.VISIBLE);
         // Return false to indicate that we have not consumed the event and that we wish
         // for the default behavior to occur (which is for the camera to move such that the
         // marker is centered and for the marker's info window to open, if it has one).
         return false;
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        findViewById(R.id.completed_trail).setVisibility(View.INVISIBLE);
     }
 
     protected void onDestroy() {
