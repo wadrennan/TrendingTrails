@@ -36,6 +36,12 @@ public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_info);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         final int id = (int) getIntent().getSerializableExtra("TRAIL_ID");
         reviewCards = findViewById(R.id.infoReviewCards);
         new TrailInfoTask().execute(Integer.toString(id));
@@ -70,7 +76,6 @@ public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdap
             TrailInfoViewAdapter adapter = new TrailInfoViewAdapter(reviews, TrailInfoActivity.this);
             reviewCards.setAdapter(adapter);
             LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
-            //llm.setReverseLayout(true);
             reviewCards.setLayoutManager(llm);
         }
 

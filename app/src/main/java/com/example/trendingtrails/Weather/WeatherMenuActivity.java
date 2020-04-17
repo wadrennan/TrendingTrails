@@ -40,6 +40,10 @@ public class WeatherMenuActivity extends BaseActivity implements WeatherViewAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_locations_updated);
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
         checkLocationPermissions();
         lt = new LocationTrack(this);
         if(lt.canGetLocation()){

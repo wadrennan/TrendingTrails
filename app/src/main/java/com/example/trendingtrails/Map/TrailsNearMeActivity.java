@@ -42,10 +42,16 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
 
 
     LocationTrack lt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trails_near_me);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         checkLocationPermissions();
         lt = new LocationTrack(this);
 
@@ -54,18 +60,17 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
             lat = lt.getLatitude();
             lon = lt.getLongitude();
         }
-        System.out.println(lat+" "+lon);
+        System.out.println(lat + " " + lon);
         latRad = deg2rad(lat);
         lonRad = deg2rad(lon);
         trailCards = (RecyclerView) findViewById(R.id.recycler_view);
         conn = Database.connect();
-        if(conn == null){
+        if (conn == null) {
             System.out.println("Connection Null in Map Menu");
             //function to output trails not available
             sqlError();
-        }
-        else{
-            String query = "SELECT trail_id, name, distance FROM AllTrails where acos(sin("+latRad+") * sin(RADIANS(lat)) + cos("+latRad+") * cos(RADIANS(lat)) * cos(RADIANS(long) - ("+lonRad+"))) * 6371 <= 80.4672";
+        } else {
+            String query = "SELECT trail_id, name, distance FROM AllTrails where acos(sin(" + latRad + ") * sin(RADIANS(lat)) + cos(" + latRad + ") * cos(RADIANS(lat)) * cos(RADIANS(long) - (" + lonRad + "))) * 6371 <= 80.4672";
             System.out.println(query);
             new TrailsNearMeActivity.QueryDb().execute(query);
         }
@@ -75,21 +80,21 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
     @Override
     public void onMapClick(int position) {
         //Intent intent = new Intent(this, MapExistingTrailActivity.class);
-        String id = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.id_number)).getText().toString();
+        String id = ((TextView) trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.id_number)).getText().toString();
         int id_num = Integer.parseInt(id);
-        System.out.println("Trail id "+id_num+" clicked!");
+        System.out.println("Trail id " + id_num + " clicked!");
         Intent intent = new Intent(this, TrailInfoActivity.class);
         intent.putExtra("TRAIL_ID", id_num);
         startActivity(intent);
-       // String name = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.trail_name)).getText().toString();
+        // String name = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.trail_name)).getText().toString();
         //System.out.println("Trail "+name+" clicked! id = "+id);
 
     }
 
-    private class QueryDb extends AsyncTask<String,Void, List<Trail>> {
+    private class QueryDb extends AsyncTask<String, Void, List<Trail>> {
         //Queries db and populates a list of results asynchronously
         @Override
-        protected List<Trail> doInBackground(String... query){
+        protected List<Trail> doInBackground(String... query) {
             try {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(query[0]);
@@ -98,20 +103,19 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
                 int id;
                 String name;
                 double dist;
-                while(!rs.isAfterLast()){
+                while (!rs.isAfterLast()) {
                     id = rs.getInt("trail_id");
-                    name =  rs.getString("name");
+                    name = rs.getString("name");
                     dist = rs.getDouble("distance");
                     BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
                     truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
                     dist = truncatedDist.doubleValue();
-                    Trail t = new Trail(id, name,dist);
+                    Trail t = new Trail(id, name, dist);
                     trailList.add(t);
                     rs.next();
                 }
                 return trailList;
-            }
-            catch(SQLException e){
+            } catch (SQLException e) {
                 System.out.println("Error in SELECT in TrailsNearMe");
                 //sqlError();
                 return null;
@@ -120,11 +124,10 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
 
         //Executes on UI thread after aync query and list generation is done
         @Override
-        protected void onPostExecute(List<Trail> trailList){
-            if(trailList == null){
+        protected void onPostExecute(List<Trail> trailList) {
+            if (trailList == null) {
                 Toast.makeText(getApplicationContext(), "No Trails within this distance!", Toast.LENGTH_LONG).show();
-            }
-            else {
+            } else {
                 super.onPostExecute(trailList);
                 TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, TrailsNearMeActivity.this);
                 trailCards.setAdapter(adapter);
@@ -142,11 +145,11 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
         return (rad * 180.0 / Math.PI);
     }
 
-    private void sqlError(){
+    private void sqlError() {
         Toast.makeText(getApplicationContext(), "Trails Near Me Unavailable", Toast.LENGTH_LONG).show();
     }
 
-    private void initSpinner(){
+    private void initSpinner() {
         List<String> distances = new ArrayList<String>();
         distances.add("25 miles");
         distances.add("50 miles");
@@ -164,34 +167,30 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        if(selectDistance.getSelectedItem().toString() == currentSelected){
+                        if (selectDistance.getSelectedItem().toString() == currentSelected) {
                             // do nothing
                             System.out.println("This item was already selected");
-                        }
-                        else{
+                        } else {
                             String op;
                             currentSelected = selectDistance.getSelectedItem().toString();
                             double dist;
-                            if(currentSelected == "25 miles"){
+                            if (currentSelected == "25 miles") {
                                 dist = 40.2336;
                                 op = "<=";
-                            }
-                            else if(currentSelected == "50 miles"){
+                            } else if (currentSelected == "50 miles") {
                                 dist = 80.4672;
                                 op = "<=";
-                            }
-                            else if(currentSelected == "100 miles"){
+                            } else if (currentSelected == "100 miles") {
                                 dist = 160.934;
                                 op = "<=";
-                            }
-                            else{
+                            } else {
                                 dist = 160.934;
                                 op = ">=";
                             }
 
                             trailCards.removeAllViews();
                             trailCards.setAdapter(null);
-                            String query = "SELECT trail_id, name, distance FROM AllTrails where acos(sin("+latRad+") * sin(RADIANS(lat)) + cos("+latRad+") * cos(RADIANS(lat)) * cos(RADIANS(long) - ("+lonRad+"))) * 6371 "+op+" "+dist+"";
+                            String query = "SELECT trail_id, name, distance FROM AllTrails where acos(sin(" + latRad + ") * sin(RADIANS(lat)) + cos(" + latRad + ") * cos(RADIANS(lat)) * cos(RADIANS(long) - (" + lonRad + "))) * 6371 " + op + " " + dist + "";
                             System.out.println(query);
                             new TrailsNearMeActivity.QueryDb().execute(query);
 
@@ -205,7 +204,6 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
                 }
         );
     }
-
 
 
 }

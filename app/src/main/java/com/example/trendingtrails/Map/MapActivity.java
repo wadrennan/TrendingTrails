@@ -210,9 +210,35 @@ public class MapActivity extends BaseActivity
         double dist = trail.getDistance(pointList);
         System.out.println("dist is " + dist + "");
 
-        askToSave(dist, encodedPoly);
+        if(dist == 0){
+            failToSave();
+        }
+        else {
+            askToSave(dist, encodedPoly);
+        }
     }
 
+    private void failToSave() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Failed to save!");
+        builder.setMessage("Your total distance was " + 0.0 + " miles. Try tracking a real trail!");
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    default: break;
+                }
+            }
+        };
+
+        // add the buttons
+        builder.setPositiveButton("Ok", dialogClickListener);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     private void askToSave(final double dist, final String encodedPoly) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
