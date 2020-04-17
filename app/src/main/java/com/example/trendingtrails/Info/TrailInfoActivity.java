@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Map.MapActivity;
@@ -24,15 +27,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrailInfoActivity extends BaseActivity {
+public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdapter.OnCardClickListener {
     List<Review> reviews = new ArrayList<Review>();
     Trail trail;
+    RecyclerView reviewCards;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trail_info);
         final int id = (int) getIntent().getSerializableExtra("TRAIL_ID");
+        reviewCards = findViewById(R.id.infoReviewCards);
         new TrailInfoTask().execute(Integer.toString(id));
         findViewById(R.id.infoMapBtn).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -41,6 +46,11 @@ public class TrailInfoActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onCardClick(int position) {
+
     }
 
     public class TrailInfoTask extends AsyncTask<String, String, String> {
@@ -57,42 +67,11 @@ public class TrailInfoActivity extends BaseActivity {
             TextView intensityText = findViewById(R.id.intensityNumTxt);
             ratingText.setText(String.format("%.2f", rating) + "/10");
             intensityText.setText(String.format("%.2f", intensity) + "/10");
-            LinearLayout lm = findViewById(R.id.trailInfoLayout);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(50, 50, 50, 0);
-            LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            textParams.setMargins(10, 0, 0, 0);
-            for (Review review : reviews) {
-                LinearLayout ll = new LinearLayout(getApplicationContext());
-                ll.setLayoutParams(params);
-                ll.setOrientation(LinearLayout.VERTICAL);
-                ll.setBackground(getResources().getDrawable(R.drawable.border));
-                ll.setPadding(25, 25, 25, 25);
-                LinearLayout l1 = new LinearLayout(getApplicationContext());
-                TextView nameLocal = new TextView(getApplicationContext());
-                nameLocal.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                nameLocal.setLayoutParams(textParams);
-                nameLocal.setText("-"+review.name);
-                TextView comment = new TextView(getApplicationContext());
-                comment.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                comment.setLayoutParams(textParams);
-                comment.setText("Review: " + review.review);
-                TextView intensityLocal = new TextView(getApplicationContext());
-                intensityLocal.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                intensityLocal.setLayoutParams(textParams);
-                intensityLocal.setText("Intensity: " + Integer.toString(review.intensity));
-                TextView ratingLocal = new TextView(getApplicationContext());
-                ratingLocal.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                ratingLocal.setLayoutParams(textParams);
-                ratingLocal.setText("Rating: " + Integer.toString(review.rating));
-                ll.addView(ratingLocal);
-                ll.addView(intensityLocal);
-                ll.addView(comment);
-                ll.addView(nameLocal);
-                lm.addView(ll);
-            }
+            TrailInfoViewAdapter adapter = new TrailInfoViewAdapter(reviews, TrailInfoActivity.this);
+            reviewCards.setAdapter(adapter);
+            LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+            //llm.setReverseLayout(true);
+            reviewCards.setLayoutManager(llm);
         }
 
         private double calculateIntensity(List<Review> trails) {
