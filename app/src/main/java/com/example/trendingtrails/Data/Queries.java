@@ -2,6 +2,7 @@ package com.example.trendingtrails.Data;
 
 import com.example.trendingtrails.Models.AddedTrail;
 import com.example.trendingtrails.Models.Global;
+import com.example.trendingtrails.Models.Leader;
 import com.example.trendingtrails.Models.Review;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.Models.User;
@@ -13,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.trendingtrails.Models.Global.AccountInfo;
@@ -226,5 +228,26 @@ public class Queries {
             rs.next();
         }
         return trailList;
+    }
+
+    public static List<Leader> getLeaders(Connection conn, Object start, Object end) throws SQLException {
+        String query = "SELECT p.name, SUM(t.distance) as dist " +
+                "  FROM [dbo].[Profile] p " +
+                "  JOIN CompletedTrails ct " +
+                "  ON ct.email = p.email " +
+                "  JOIN AllTrails t " +
+                "  ON t.trail_id = ct.TrailId " +
+                "  WHERE ct.date >= '" + start + "' AND ct.date < '" + end + "'" +
+                "  GROUP BY p.name " +
+                "  ORDER BY dist desc ";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        List<Leader> leaders = new ArrayList<>();
+        while (rs.next()) {
+            String name = rs.getString("name");
+            double distance = rs.getDouble("dist");
+            leaders.add(new Leader(name, distance));
+        }
+        return leaders;
     }
 }

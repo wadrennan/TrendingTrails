@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Info.TrailInfoActivity"></activity>
+        <activity android:name=".Leaderboard.LeaderboardActivity"></activity>
+        <activity android:name=".Info.TrailInfoActivity" />
         <activity android:name=".BaseActivity" />
 
         <meta-data
@@ -45,10 +46,9 @@
         <activity android:name=".Map.SaveTrailActivity" />
         <activity android:name=".Map.MapMenuActivity" />
         <activity android:name=".Map.TrailsNearMeActivity" />
-        <activity android:name=".Map.MapExistingTrailActivity"></activity>
-        <activity android:name=".Info.ReviewActivity"></activity>
-        <activity android:name=".Weather.WeatherMenuActivity">
-        </activity>
+        <activity android:name=".Map.MapExistingTrailActivity" />
+        <activity android:name=".Info.ReviewActivity" />
+        <activity android:name=".Weather.WeatherMenuActivity"></activity>
     </application>
 
 </manifest>

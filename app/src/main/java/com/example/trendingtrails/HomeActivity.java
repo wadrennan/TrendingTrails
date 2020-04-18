@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.trendingtrails.Data.Queries;
+import com.example.trendingtrails.Leaderboard.LeaderboardActivity;
 import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Map.MapActivity;
 import com.example.trendingtrails.Map.MapMenuActivity;
@@ -55,7 +56,8 @@ public class HomeActivity extends BaseActivity {
         findViewById(R.id.leaderboardButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent activityIntenet = new Intent(getBaseContext(), LeaderboardActivity.class);
+                startActivity(activityIntenet);
             }
         });
         findViewById(R.id.profileLayout).setOnClickListener(new View.OnClickListener(){
