@@ -15,6 +15,7 @@
         android:fontFamily="@font/alice"
         android:text="Intensity"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/infoNameTxt"
         app:layout_constraintTop_toBottomOf="@+id/distanceTxt" />
@@ -27,6 +28,7 @@
         android:fontFamily="@font/alice"
         android:text="Rating"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/infoNameTxt"
         app:layout_constraintTop_toBottomOf="@+id/distanceTxt" />
@@ -38,6 +40,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/alice"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
@@ -64,6 +67,7 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/alice"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -74,6 +78,7 @@
         android:layout_height="30dp"
         android:fontFamily="@font/alice"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -93,6 +98,7 @@
         android:layout_height="28dp"
         android:fontFamily="@font/alice"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/infoNameTxt"
         app:layout_constraintStart_toStartOf="@+id/infoNameTxt"

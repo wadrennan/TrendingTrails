@@ -284,4 +284,29 @@ public class Queries {
             System.out.println(e);
         }
     }
+
+    public static List<Trail> getNearbyTrails(Connection conn, double latRad, double lonRad, String op, double dist) throws SQLException {
+        String query = "SELECT trail_id, name, distance, lat, long FROM AllTrails where acos(sin(" + latRad + ") * sin(RADIANS(lat)) + cos(" + latRad + ") * cos(RADIANS(lat)) * cos(RADIANS(long) - (" + lonRad + "))) * 6371 " + op + " " + dist + "";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        List<Trail> trailList = new ArrayList<>();
+        rs.next();
+        int id;
+        String name;
+        double distance;
+        while (!rs.isAfterLast()) {
+            id = rs.getInt("trail_id");
+            name = rs.getString("name");
+            distance = rs.getDouble("distance");
+            double latitude = rs.getDouble("lat");
+            double longitude = rs.getDouble("long");
+            BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
+            truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
+            dist = truncatedDist.doubleValue();
+            Trail t = new Trail(id, name, distance, latitude, longitude);
+            trailList.add(t);
+            rs.next();
+        }
+        return trailList;
+    }
 }

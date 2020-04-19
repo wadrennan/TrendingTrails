@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trendingtrails.BaseActivity;
+import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Info.TrailInfoActivity;
 import com.example.trendingtrails.Location.LocationTrack;
@@ -70,9 +71,7 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
             //function to output trails not available
             sqlError();
         } else {
-            String query = "SELECT trail_id, name, distance FROM AllTrails where acos(sin(" + latRad + ") * sin(RADIANS(lat)) + cos(" + latRad + ") * cos(RADIANS(lat)) * cos(RADIANS(long) - (" + lonRad + "))) * 6371 <= 80.4672";
-            System.out.println(query);
-            new TrailsNearMeActivity.QueryDb().execute(query);
+            new TrailsNearMeActivity.QueryDb().execute("<=", "80.4672");
         }
         initSpinner();
     }
@@ -96,25 +95,7 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
         @Override
         protected List<Trail> doInBackground(String... query) {
             try {
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(query[0]);
-                List<Trail> trailList = new ArrayList<>();
-                rs.next();
-                int id;
-                String name;
-                double dist;
-                while (!rs.isAfterLast()) {
-                    id = rs.getInt("trail_id");
-                    name = rs.getString("name");
-                    dist = rs.getDouble("distance");
-                    BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
-                    truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
-                    dist = truncatedDist.doubleValue();
-                    Trail t = new Trail(id, name, dist);
-                    trailList.add(t);
-                    rs.next();
-                }
-                return trailList;
+                return Queries.getNearbyTrails(conn, latRad, lonRad, query[0], Double.parseDouble(query[1]));
             } catch (SQLException e) {
                 System.out.println("Error in SELECT in TrailsNearMe");
                 //sqlError();
@@ -129,6 +110,9 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
                 Toast.makeText(getApplicationContext(), "No Trails within this distance!", Toast.LENGTH_LONG).show();
             } else {
                 super.onPostExecute(trailList);
+                for (Trail trail : trailList) {
+                    trail.distanceAway = distance(lat, lon, trail.latitude, trail.longitude);
+                }
                 TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, TrailsNearMeActivity.this);
                 trailCards.setAdapter(adapter);
                 trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -136,6 +120,18 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
         }
     }
 
+    private static double distance(double lat1, double lon1, double lat2, double lon2) {
+        if ((lat1 == lat2) && (lon1 == lon2)) {
+            return 0;
+        } else {
+            double theta = lon1 - lon2;
+            double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            dist = dist * 60 * 1.1515;
+            return (dist);
+        }
+    }
 
     private double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
@@ -190,9 +186,7 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
 
                             trailCards.removeAllViews();
                             trailCards.setAdapter(null);
-                            String query = "SELECT trail_id, name, distance FROM AllTrails where acos(sin(" + latRad + ") * sin(RADIANS(lat)) + cos(" + latRad + ") * cos(RADIANS(lat)) * cos(RADIANS(long) - (" + lonRad + "))) * 6371 " + op + " " + dist + "";
-                            System.out.println(query);
-                            new TrailsNearMeActivity.QueryDb().execute(query);
+                            new TrailsNearMeActivity.QueryDb().execute(op, Double.toString(dist));
 
                         }
                     }

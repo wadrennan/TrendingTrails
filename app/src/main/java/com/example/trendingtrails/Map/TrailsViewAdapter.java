@@ -21,6 +21,7 @@ public class TrailsViewAdapter extends RecyclerView.Adapter<TrailsViewAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView name;
         public TextView distance;
+        public TextView distanceFrom;
         OnMapListener onMapListener;
         public TextView id;
 
@@ -29,6 +30,7 @@ public class TrailsViewAdapter extends RecyclerView.Adapter<TrailsViewAdapter.Vi
             itemView.setOnClickListener(this);
             name = (TextView) itemView.findViewById(R.id.trail_name);
             distance = (TextView) itemView.findViewById(R.id.distance);
+            distanceFrom = (TextView) itemView.findViewById(R.id.distanceFrom);
             id = itemView.findViewById(R.id.id_number);
             this.onMapListener = onMapListener;
         }
@@ -68,7 +70,8 @@ public class TrailsViewAdapter extends RecyclerView.Adapter<TrailsViewAdapter.Vi
         TextView name = viewHolder.name;
         name.setText(t.name);
         TextView distance = viewHolder.distance;
-        distance.setText(""+t.distance+" miles");
+        distance.setText(String.format("%.2f", t.distance)+" miles");
+        viewHolder.distanceFrom.setText(String.format("%.2f\n", t.distanceAway) + " miles away");
         TextView id = viewHolder.id;
         id.setText(""+t.id);
         id.setVisibility(View.INVISIBLE);
