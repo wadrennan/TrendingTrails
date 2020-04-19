@@ -20,10 +20,9 @@
                 android:layout_width="118dp"
                 android:layout_height="112dp"
                 android:layout_marginTop="36dp"
-                android:layout_marginEnd="40dp"
                 android:background="@drawable/roundicon"
                 android:cropToPadding="false"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/profileLayout"
                 app:layout_constraintTop_toBottomOf="@+id/profileLayout"
                 app:srcCompat="@drawable/weathericon" />
 
@@ -41,11 +40,10 @@
                 android:id="@+id/mapButton"
                 android:layout_width="120dp"
                 android:layout_height="116dp"
-                android:layout_marginStart="44dp"
                 android:layout_marginTop="36dp"
                 android:background="@drawable/roundicon"
                 android:cropToPadding="false"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/profileLayout"
                 app:layout_constraintTop_toBottomOf="@+id/profileLayout"
                 app:srcCompat="@drawable/mapsicon" />
 
@@ -63,7 +61,7 @@
                 android:id="@+id/trailsNearMeButton"
                 android:layout_width="118dp"
                 android:layout_height="112dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="36dp"
                 android:background="@drawable/roundicon"
                 android:cropToPadding="false"
                 app:layout_constraintStart_toStartOf="@+id/mapButton"
@@ -72,9 +70,11 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profileLayout"
-                android:layout_width="358dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="36dp"
+                android:layout_marginLeft="36dp"
+                android:layout_marginRight="36dp"
                 android:background="@drawable/border"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.49"
@@ -83,38 +83,38 @@
 
                 <TextView
                     android:id="@+id/homeRankTxt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="85dp"
                     android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@+id/profileImg"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/homeWelcomeTxt" />
 
                 <ImageView
                     android:id="@+id/profileImg"
-                    android:layout_width="99dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/homeWelcomeTxt"
-                    android:layout_width="249dp"
-                    android:layout_height="44dp"
-                    android:lines="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="85dp"
                     android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/profileImg"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton
                 android:id="@+id/leaderboardButton"
                 android:layout_width="118dp"
                 android:layout_height="112dp"
-                android:layout_marginTop="52dp"
+                android:layout_marginTop="36dp"
                 android:background="@drawable/roundicon"
                 android:cropToPadding="false"
                 app:layout_constraintEnd_toEndOf="@+id/weatherButton"

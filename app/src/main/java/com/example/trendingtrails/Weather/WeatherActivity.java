@@ -85,7 +85,7 @@ public class WeatherActivity extends BaseActivity {
                         //String finalresult = String.valueOf(context.getDouble("valid_date"));
                        // list.add(finalresult);
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("E, MMMM dd, yyyy");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
                         try {
 
                             Date date = formatter.parse(finalresult);
