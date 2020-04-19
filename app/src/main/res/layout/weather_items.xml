@@ -9,46 +9,53 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardBackgroundColor="#707574">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="129dp">
+            android:layout_height="129dp"
+            android:background="@drawable/border">
 
-            <TextView
-                android:id="@+id/zip_label"
+            <Button
+                android:id="@+id/zipDeleteBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="78dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/redborder"
+                android:text="Remove"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/locationName"
+                android:layout_width="300px"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="85dp"
-                android:layout_marginEnd="258dp"
                 android:layout_marginBottom="85dp"
-                android:text="Zip Code:"
+                android:fontFamily="@font/alice"
                 android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textSize="21sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.507" />
 
-            <TextView
-                android:id="@+id/zip_value"
+            <ImageView
+                android:id="@+id/locationCurrentWeather"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="113dp"
-                android:layout_marginTop="53dp"
-                android:layout_marginEnd="79dp"
-                android:layout_marginBottom="52dp"
-                android:text="zipcode"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/zip_label"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintEnd_toStartOf="@+id/zipDeleteBtn"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/locationName"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/rain" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>

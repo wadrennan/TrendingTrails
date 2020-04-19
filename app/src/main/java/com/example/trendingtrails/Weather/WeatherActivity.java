@@ -1,6 +1,7 @@
 package com.example.trendingtrails.Weather;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.viewpager2.widget.ViewPager2;
@@ -12,6 +13,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.trendingtrails.BaseActivity;
+import com.example.trendingtrails.Data.Queries;
+import com.example.trendingtrails.Database;
 import com.example.trendingtrails.HomeActivity;
 import com.example.trendingtrails.R;
 
@@ -19,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,14 +43,13 @@ public class WeatherActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pager_main);
         Bundle b = getIntent().getExtras();
-        String zip = "37027";
+        final String zip;
         double lat =0;
         double lng = 0;
-        if(b!=null){
-                zip = b.getString("zip");
-                lat = b.getDouble("lat");
-                lng = b.getDouble("lng");
-        }
+        final boolean isNewLocation = b.getBoolean("isNew", false);
+        zip = b.getString("zip", "");
+        lat = b.getDouble("lat", 0);
+        lng = b.getDouble("lng", 0);
         viewPager2 = findViewById(R.id.viewPager2);
         dates= new ArrayList<>();
         maxTemps=new ArrayList<>();
@@ -101,8 +104,13 @@ public class WeatherActivity extends BaseActivity {
                         Log.d("LIST","Element Added");
                         //txtDisplay.append(finalresult + " C\n");
                     }
-
-
+                    if(isNewLocation) {
+                        String city = response.getString("city_name");
+                        String state = response.getString("state_code");
+                        String name = city + ", " + state;
+                        Connection conn = Database.connect();
+                        Queries.insertLocation(conn, zip, name);
+                    }
                     //  findViewById(R.id.progressBar1).setVisibility(View.GONE);
                     setViewPager2Adapter(dates, maxTemps, lowTemps, descriptors);
                 }

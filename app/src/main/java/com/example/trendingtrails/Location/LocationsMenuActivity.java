@@ -64,55 +64,6 @@ public class LocationsMenuActivity extends BaseActivity {
             }
         });
         //add location button on click listener
-        findViewById(R.id.add_location).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.add_location:
-                        Intent weatherIntent = new Intent(getBaseContext(), SelectCityActivity.class);
-                        startActivity(weatherIntent);
-                        break;
-                }
-            }
-        });
-
-        findViewById(R.id.location1_forecast).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (code1 != null) {
-                    Intent intent = new Intent(getApplicationContext(), WeatherActivity.class);
-                    intent.putExtra("zip", code1);
-                    startActivity(intent);
-                }
-            }
-        });
-
-        findViewById(R.id.location2_forecast).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (code2 != null) {
-                    Intent intent = new Intent(getApplicationContext(), WeatherActivity.class);
-                    intent.putExtra("zip", code2);
-                    startActivity(intent);
-                }
-            }
-        });
-
-        findViewById(R.id.location1_delete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeZipCode(code1);
-                new ZipCodeTasks().execute();
-            }
-        });
-
-        findViewById(R.id.location2_delete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeZipCode(code2);
-                new ZipCodeTasks().execute();
-            }
-        });
     }
 
     @Override
@@ -197,21 +148,6 @@ public class LocationsMenuActivity extends BaseActivity {
                 return null;
             }
             return null;
-        }
-    }
-
-    private void removeZipCode(String code) {
-        Connection conn = Database.connect();
-        String query = " DELETE TOP(1) FROM ZipCodes WHERE code = " + code +
-                " AND email = '" + AccountInfo.personEmail + "' ";
-
-        System.out.println(query);
-        try {
-            Statement stmt = conn.createStatement();
-            stmt.execute(query);
-        } catch (Exception e) {
-            System.out.println("Error in removing Location");
-            System.out.println(e);
         }
     }
 }

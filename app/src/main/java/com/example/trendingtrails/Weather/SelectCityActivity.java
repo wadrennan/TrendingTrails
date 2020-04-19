@@ -27,9 +27,9 @@ public class SelectCityActivity extends BaseActivity {
 
                 if (Input.isValidZipCode(s)) {
                     Connection conn = Database.connect();
-                    Queries.insertLocation(conn, s);
                     Intent intent = new Intent(SelectCityActivity.this, WeatherActivity.class);
                     intent.putExtra("zip", s);
+                    intent.putExtra("isNew", true);
                     startActivity(intent);
                     finish();
                 } else {

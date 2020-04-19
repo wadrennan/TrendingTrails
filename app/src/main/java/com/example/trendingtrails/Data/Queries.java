@@ -1,8 +1,11 @@
 package com.example.trendingtrails.Data;
 
+import android.content.Intent;
+
 import com.example.trendingtrails.Models.AddedTrail;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Leader;
+import com.example.trendingtrails.Models.Location;
 import com.example.trendingtrails.Models.Review;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.Models.User;
@@ -132,9 +135,10 @@ public class Queries {
         return trails;
     }
 
-    public static void insertLocation(Connection conn, String zipCode) {
-        String query = " INSERT INTO ZipCodes (code, email) " +
-                " Values ('" + zipCode + "','" + AccountInfo.personEmail + "')";
+    public static void insertLocation(Connection conn, String zipCode, String name) {
+        String query = " INSERT INTO ZipCodes (code, email, LocationName) " +
+                " Values ('" + zipCode + "','" + AccountInfo.personEmail + "' " +
+                ", '" + name + "')";
 
         System.out.println(query);
         try {
@@ -159,6 +163,22 @@ public class Queries {
             rs.next();
         }
         return zipList;
+    }
+
+    public static List<Location> getLocations(Connection conn) throws SQLException {
+        String query = "SELECT code, LocationName FROM ZipCodes WHERE email='"+ Global.AccountInfo.personEmail+"';";
+        System.out.println(query);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        List<Location> locations = new ArrayList<>();
+        rs.next();
+        while(!rs.isAfterLast()){
+            String z = rs.getString("LocationName");
+            String code = rs.getString("code");
+            locations.add(new Location(code, z));
+            rs.next();
+        }
+        return locations;
     }
 
     public static void insertNewTrail(Connection conn, String name, double lat, double lon, double distance, String encodedPoly, int rating, int intensity, String comments){
@@ -249,5 +269,19 @@ public class Queries {
             leaders.add(new Leader(name, distance));
         }
         return leaders;
+    }
+
+    public static void deleteZipCode(Connection conn, String zip){
+        String query = " DELETE TOP(1) FROM ZipCodes WHERE code = '" + zip +
+                "' AND email = '" + AccountInfo.personEmail + "' ";
+
+        System.out.println(query);
+        try {
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (Exception e) {
+            System.out.println("Error in removing Location");
+            System.out.println(e);
+        }
     }
 }
