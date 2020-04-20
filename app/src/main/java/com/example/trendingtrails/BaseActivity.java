@@ -53,6 +53,10 @@ public class BaseActivity extends AppCompatActivity {
                 Intent profileIntent = new Intent(getBaseContext(), ProfileActivity.class);
                 startActivity(profileIntent);
                 return true;
+            case R.id.menuitem_home:
+                Intent intent = new Intent(getBaseContext(), HomeActivity.class);
+                startActivity(intent);
+                finishAffinity();
         }
         return false;
     }

@@ -41,7 +41,7 @@ public class WeatherActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_pager_main);
+        setContentView(R.layout.weather_view_pager);
         Bundle b = getIntent().getExtras();
         final String zip;
         double lat =0;
