@@ -3,6 +3,7 @@ package com.example.trendingtrails.Models;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 public class Trail implements Serializable {
@@ -38,6 +39,15 @@ public class Trail implements Serializable {
         this.latitude = latitude;
         this.longitude = longitude;
     }
+
+    public static Comparator<Trail> distaneComparator = new Comparator<Trail>() {
+
+        public int compare(Trail t1, Trail t2) {
+            double distance1 = t1.distanceAway;
+            double distance2 = t2.distanceAway;
+
+            return distance1 >= distance2 ? 1 : -1;
+        }};
 
     public double getDistance(List<LatLng> pointList){
         if(distance != 0){

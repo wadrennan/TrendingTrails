@@ -10,33 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-
-            <Spinner
-                android:id="@+id/rating_spinner"
-                android:layout_width="94dp"
-                android:layout_height="46dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"
-                app:layout_constraintEnd_toEndOf="@+id/rating_label"
-                app:layout_constraintStart_toStartOf="@+id/rating_label"
-                app:layout_constraintTop_toBottomOf="@+id/rating_label" />
-
-            <Spinner
-                android:id="@+id/intensity_spinner"
-                android:layout_width="94dp"
-                android:layout_height="46dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:spinnerMode="dropdown"
-                app:layout_constraintEnd_toEndOf="@+id/intensty_label"
-                app:layout_constraintStart_toStartOf="@+id/intensty_label"
-                app:layout_constraintTop_toBottomOf="@+id/intensty_label" />
 
             <EditText
                 android:id="@+id/comments"
@@ -55,39 +32,40 @@
                 android:id="@+id/intensty_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
                 android:layout_marginTop="36dp"
                 android:fontFamily="@font/alice"
                 android:text="Intensity"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/intensity_spinner"
+                app:layout_constraintStart_toStartOf="@+id/intensity_spinner"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/rating_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="36dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/alice"
                 android:text="Rating"
                 android:textAlignment="center"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/intensty_label" />
+                app:layout_constraintEnd_toEndOf="@+id/rating_spinner"
+                app:layout_constraintStart_toStartOf="@+id/rating_spinner"
+                app:layout_constraintTop_toBottomOf="@+id/intensity_spinner" />
 
             <TextView
                 android:id="@+id/comments_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/alice"
                 android:text="Comments"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/intensity_spinner" />
+                app:layout_constraintTop_toBottomOf="@+id/rating_spinner" />
 
             <Button
                 android:id="@+id/submit_button"
@@ -101,6 +79,28 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comments" />
+
+            <SeekBar
+                android:id="@+id/intensity_spinner"
+                style="@style/Widget.AppCompat.SeekBar.Discrete"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:max="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/intensty_label" />
+
+            <RatingBar
+                android:id="@+id/rating_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rating_label" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

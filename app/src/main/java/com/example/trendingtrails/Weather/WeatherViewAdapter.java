@@ -111,7 +111,7 @@ public class WeatherViewAdapter extends RecyclerView.Adapter<WeatherViewAdapter.
         else{
             viewHolder.weather.setImageResource(R.drawable.cloudy);
         }
-        if(viewHolder.getAdapterPosition() == 0)
+        if(viewHolder.zip.getText().equals("Current Location"))
             viewHolder.deleteZip.setVisibility(View.INVISIBLE);
         viewHolder.deleteZip.setOnClickListener(new View.OnClickListener() {
             @Override

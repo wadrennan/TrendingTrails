@@ -79,9 +79,10 @@ public class Queries {
     }
 
     public static List<Review> getReviews(Connection conn, int id) throws SQLException {
-        String query = "SELECT name, intensity, rating, review FROM CompletedTrails ct " +
+        String query = "SELECT name, intensity, rating, review, date FROM CompletedTrails ct " +
                 " JOIN Profile p on p.email = ct.email " +
-                " where TrailId = " + id + " ";
+                " where TrailId = " + id + " " +
+                " order by date desc";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         List<Review> reviews = new ArrayList<>();
@@ -90,7 +91,9 @@ public class Queries {
             int intensity = rs.getInt("intensity");
             int rating = rs.getInt("rating");
             String review = rs.getString("review");
-            reviews.add(new Review(name, intensity, rating, review));
+            Date date = rs.getDate("date");
+            if(review != null)
+                reviews.add(new Review(name, intensity, rating, review, date));
         }
         return reviews;
     }
@@ -213,6 +216,20 @@ public class Queries {
         String query = " INSERT INTO CompletedTrails (TrailId, email, rating, intensity, review, date) " +
                 " VALUES ("+id+", '" + AccountInfo.personEmail + "',"+rating+","
                 +intensity+",'"+comments+"', CURRENT_TIMESTAMP);";
+        System.out.println(query);
+        try{
+            Statement stmt = conn.createStatement();
+            //ResultSet rs = stmt.executeQuery(query);
+            stmt.execute(query);
+        }
+        catch(SQLException e){
+            System.out.println("Error in review insert");
+        }
+    }
+
+    public static void insertCompletedTrail(Connection conn, int id){
+        String query = " INSERT INTO CompletedTrails (TrailId, email, date) " +
+                " VALUES ("+id+", '" + AccountInfo.personEmail + "', CURRENT_TIMESTAMP);";
         System.out.println(query);
         try{
             Statement stmt = conn.createStatement();

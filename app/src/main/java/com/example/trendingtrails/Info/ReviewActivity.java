@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,41 +19,26 @@ import java.sql.Connection;
 
 public class ReviewActivity extends BaseActivity {
 
-    private Spinner ratingSpinner;
-    private Spinner intensitySpinner;
+    private RatingBar ratingValue;
+    private SeekBar intensityValue;
     private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-        populateSpinners();
         Intent i = getIntent();
         id = i.getIntExtra("TRAIL_ID", -1);
+        ratingValue = findViewById(R.id.rating_spinner);
+        intensityValue = findViewById(R.id.intensity_spinner);
         findViewById(R.id.submit_button).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (intensitySpinner.getSelectedItem() != null && ratingSpinner.getSelectedItem() != null) {
-                    System.out.println("Submit Clicked");
-                    //Toast.makeText(getApplicationContext(), "Submit Successful", Toast.LENGTH_SHORT).show();
-                    postToDatabase();
-                    finish();
-                } else {
-                    System.out.println("Selection Not detected!");
-                    Toast.makeText(getApplicationContext(), "Submission unsuccessful. Try again", Toast.LENGTH_SHORT);
-                }
+                System.out.println("Submit Clicked");
+                postToDatabase();
+                Toast.makeText(getApplicationContext(), "Submit Successful", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
-    }
-
-    //Populates Spinner With Values
-    private void populateSpinners() {
-        ratingSpinner = (Spinner) findViewById(R.id.rating_spinner);
-        intensitySpinner = (Spinner) findViewById(R.id.intensity_spinner);
-        Integer[] elements = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        final ArrayAdapter<Integer> ratingAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, elements);
-        final ArrayAdapter<Integer> intensityAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, elements);
-        ratingSpinner.setAdapter(ratingAdapter);
-        intensitySpinner.setAdapter(intensityAdapter);
     }
 
     private void postToDatabase() {
@@ -61,7 +48,7 @@ public class ReviewActivity extends BaseActivity {
         if (conn == null) {
             Toast.makeText(getApplicationContext(), "Submission unsuccessful. Try again", Toast.LENGTH_SHORT);
         } else {
-            Queries.insertCompletedTrail(conn, id, (int) ratingSpinner.getSelectedItem(), (int) intensitySpinner.getSelectedItem(), comments);
+            Queries.insertCompletedTrail(conn, id, (int) (ratingValue.getRating()/ratingValue.getStepSize()), intensityValue.getProgress(), comments);
         }
     }
 

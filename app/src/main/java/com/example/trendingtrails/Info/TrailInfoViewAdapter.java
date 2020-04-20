@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.trendingtrails.Models.Review;
 import com.example.trendingtrails.R;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TrailInfoViewAdapter extends RecyclerView.Adapter<TrailInfoViewAdapter.ViewHolder> {
@@ -69,12 +70,14 @@ public class TrailInfoViewAdapter extends RecyclerView.Adapter<TrailInfoViewAdap
         viewHolder.rating.setRating(reviewList.get(position).rating);
         viewHolder.rating.setIsIndicator(true);
         viewHolder.intensity.setProgress(reviewList.get(position).intensity * 10);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yy");
         if(reviewList.get(position).review.trim().isEmpty()) {
-            viewHolder.review.setVisibility(View.GONE);
-            viewHolder.reviewLabel.setVisibility(View.GONE);
+            viewHolder.review.setText("-"+reviewList.get(position).name + " (" + dateFormat.format(reviewList.get(position).date) + ")");
+            viewHolder.reviewLabel.setVisibility(View.INVISIBLE);
         }
         else
-            viewHolder.review.setText(reviewList.get(position).review + "\n-"+reviewList.get(position).name);
+            viewHolder.review.setText(reviewList.get(position).review + "\n-"+reviewList.get(position).name
+                    + " (" + dateFormat.format(reviewList.get(position).date) + ")");
     }
 
     @Override

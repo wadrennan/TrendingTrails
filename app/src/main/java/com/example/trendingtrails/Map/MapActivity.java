@@ -99,9 +99,7 @@ public class MapActivity extends BaseActivity
         });
         findViewById(R.id.completed_trail).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), ReviewActivity.class);
-                intent.putExtra("TRAIL_ID", trailId);
-                startActivity(intent);
+                askToReview();
             }
         });
         // Get the SupportMapFragment and request notification
@@ -218,6 +216,39 @@ public class MapActivity extends BaseActivity
             askToSave(dist, encodedPoly);
         }
     }
+
+    private void askToReview(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Would you like to review this trail?");
+
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        Intent intent = new Intent(getBaseContext(), ReviewActivity.class);
+                        intent.putExtra("TRAIL_ID", trailId);
+                        startActivity(intent);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        // User clicked the No button
+                        Connection conn = Database.connect();
+                        Queries.insertCompletedTrail(conn, trailId);
+                        break;
+                }
+            }
+        };
+
+        // add the buttons
+        builder.setPositiveButton("Yes", dialogClickListener);
+        builder.setNegativeButton("No", dialogClickListener);
+
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private void failToSave() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

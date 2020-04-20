@@ -29,6 +29,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdapter.OnMapListener {
@@ -113,6 +114,7 @@ public class TrailsNearMeActivity extends BaseActivity implements TrailsViewAdap
                 for (Trail trail : trailList) {
                     trail.distanceAway = distance(lat, lon, trail.latitude, trail.longitude);
                 }
+                trailList.sort(Trail.distaneComparator);
                 TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, TrailsNearMeActivity.this);
                 trailCards.setAdapter(adapter);
                 trailCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
