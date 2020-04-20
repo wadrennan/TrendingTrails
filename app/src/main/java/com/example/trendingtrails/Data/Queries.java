@@ -135,10 +135,10 @@ public class Queries {
         return trails;
     }
 
-    public static void insertLocation(Connection conn, String zipCode, String name) {
-        String query = " INSERT INTO ZipCodes (code, email, LocationName) " +
+    public static void insertLocation(Connection conn, String zipCode, double latitude, double longitude, String name) {
+        String query = " INSERT INTO ZipCodes (code, email, LocationName, lat, lon) " +
                 " Values ('" + zipCode + "','" + AccountInfo.personEmail + "' " +
-                ", '" + name + "')";
+                ", '" + name + "', " + latitude + ", " + longitude + ")";
 
         System.out.println(query);
         try {
@@ -166,7 +166,7 @@ public class Queries {
     }
 
     public static List<Location> getLocations(Connection conn) throws SQLException {
-        String query = "SELECT code, LocationName FROM ZipCodes WHERE email='"+ Global.AccountInfo.personEmail+"';";
+        String query = "SELECT code, lat, lon, LocationName FROM ZipCodes WHERE email='"+ Global.AccountInfo.personEmail+"';";
         System.out.println(query);
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -175,7 +175,9 @@ public class Queries {
         while(!rs.isAfterLast()){
             String z = rs.getString("LocationName");
             String code = rs.getString("code");
-            locations.add(new Location(code, z));
+            double lat = rs.getDouble("lat");
+            double lon = rs.getDouble("lon");
+            locations.add(new Location(code, lat, lon, z));
             rs.next();
         }
         return locations;
@@ -308,5 +310,15 @@ public class Queries {
             rs.next();
         }
         return trailList;
+    }
+
+    public static boolean locationExists(Connection conn, String zip, double lat, double lon) throws SQLException {
+        String query = "SELECT code FROM ZipCodes where (lat = " + lat + " AND " +
+                " lon = " + lon + ") AND email = '" + AccountInfo.personEmail + "'";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if(rs.next())
+            return true;
+        return false;
     }
 }

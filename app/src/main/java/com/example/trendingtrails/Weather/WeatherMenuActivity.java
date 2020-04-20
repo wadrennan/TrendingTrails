@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherMenuActivity extends BaseActivity implements WeatherViewAdapter.OnCardClickListener {
@@ -100,28 +101,27 @@ public class WeatherMenuActivity extends BaseActivity implements WeatherViewAdap
         //Executes on UI thread after aync query and list generation is done
         @Override
         protected void onPostExecute(List<Location> locations) {
-            if (locations == null) {
-                Toast.makeText(getApplicationContext(), "Error Has Occured", Toast.LENGTH_LONG).show();
-            } else {
-                super.onPostExecute(locations);
-                for (Location location: locations) {
-                    if(location.currentWeather == 0)
-                        getWeather(location);
-                }
-                adapter = new WeatherViewAdapter(locations, WeatherMenuActivity.this);
-                weatherCards.setAdapter(adapter);
-                weatherCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+            Location l = new Location(lat, lon, "Current Location");
+            if(locations == null)
+                locations = new ArrayList<>();
+            locations.add(0, l);
+            super.onPostExecute(locations);
+            for (Location location : locations) {
+                if (location.currentWeather == 0)
+                    getWeather(location);
             }
+            adapter = new WeatherViewAdapter(locations, WeatherMenuActivity.this);
+            weatherCards.setAdapter(adapter);
+            weatherCards.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         }
     }
 
     @Override
-    public void onCardClick(String zip) {
+    public void onCardClick(double latitude, double longitude) {
         //Intent intent = new Intent(this, MapExistingTrailActivity.class);
-        String code = zip;
-        System.out.println("Trail id " + code + " clicked!");
         Intent intent = new Intent(this, WeatherActivity.class);
-        intent.putExtra("zip", code);
+        intent.putExtra("lat", latitude);
+        intent.putExtra("lng", longitude);
         startActivity(intent);
         // String name = ((TextView)trailCards.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.trail_name)).getText().toString();
         //System.out.println("Trail "+name+" clicked! id = "+id);
@@ -131,7 +131,7 @@ public class WeatherMenuActivity extends BaseActivity implements WeatherViewAdap
     private void getWeather(final Location location) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url;
-        url = "https://api.weatherbit.io/v2.0/current?postal_code=" + location.zipCode + "&key=603e03f3bfb042fca8b3c593c3da5a6b&units=I";
+        url = "https://api.weatherbit.io/v2.0/forecast/daily?lat="+location.latitude+"&lon="+location.longitude+"&key=603e03f3bfb042fca8b3c593c3da5a6b&units=I";
         JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public synchronized void onResponse(JSONObject response) {

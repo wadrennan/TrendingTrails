@@ -66,12 +66,12 @@ public class WeatherViewAdapter extends RecyclerView.Adapter<WeatherViewAdapter.
 
         @Override
         public void onClick(View v) {
-            onCardClickListener.onCardClick(locationList.get(getAdapterPosition()).zipCode);
+            onCardClickListener.onCardClick(locationList.get(getAdapterPosition()).latitude, locationList.get(getAdapterPosition()).longitude);
         }
     }
 
     public interface OnCardClickListener {
-        void onCardClick(String zip);
+        void onCardClick(double lat, double lon);
     }
 
     //Constructor
@@ -111,6 +111,8 @@ public class WeatherViewAdapter extends RecyclerView.Adapter<WeatherViewAdapter.
         else{
             viewHolder.weather.setImageResource(R.drawable.cloudy);
         }
+        if(viewHolder.getAdapterPosition() == 0)
+            viewHolder.deleteZip.setVisibility(View.INVISIBLE);
         viewHolder.deleteZip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -29,7 +29,7 @@ public class SelectCityActivity extends BaseActivity {
                     Connection conn = Database.connect();
                     Intent intent = new Intent(SelectCityActivity.this, WeatherActivity.class);
                     intent.putExtra("zip", s);
-                    intent.putExtra("isNew", true);
+                    intent.putExtra("isAdded", true);
                     startActivity(intent);
                     finish();
                 } else {
