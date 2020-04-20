@@ -67,6 +67,7 @@ public class TrailInfoViewAdapter extends RecyclerView.Adapter<TrailInfoViewAdap
     @Override
     public void onBindViewHolder(TrailInfoViewAdapter.ViewHolder viewHolder, int position) {
         viewHolder.rating.setRating(reviewList.get(position).rating);
+        viewHolder.rating.setIsIndicator(true);
         viewHolder.intensity.setProgress(reviewList.get(position).intensity * 10);
         if(reviewList.get(position).review.trim().isEmpty()) {
             viewHolder.review.setVisibility(View.GONE);

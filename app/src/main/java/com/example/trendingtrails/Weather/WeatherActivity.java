@@ -36,6 +36,7 @@ public class WeatherActivity extends BaseActivity {
     private List<String> dates;
     private List<String> maxTemps;
     private List<String> lowTemps;
+    private List<String> rainChance;
     int descriptors [];
     //private Bundle b;
     @Override
@@ -54,6 +55,7 @@ public class WeatherActivity extends BaseActivity {
         dates= new ArrayList<>();
         maxTemps=new ArrayList<>();
         lowTemps = new ArrayList<>();
+        rainChance=new ArrayList<>();
         descriptors = new int[8];
        /* list = new ArrayList<>();
         list.add("First Screen");
@@ -98,6 +100,8 @@ public class WeatherActivity extends BaseActivity {
                         maxTemps.add(finalresult);
                         finalresult = String.valueOf(context.getDouble("low_temp"));
                         lowTemps.add(finalresult);
+                        finalresult = String.valueOf(context.getInt("pop"));
+                        rainChance.add(finalresult);
                         JSONObject desc = context.getJSONObject("weather");
                         int d = desc.getInt("code");
                         descriptors[i] = (d);
@@ -112,7 +116,7 @@ public class WeatherActivity extends BaseActivity {
                         Queries.insertLocation(conn, zip, name);
                     }
                     //  findViewById(R.id.progressBar1).setVisibility(View.GONE);
-                    setViewPager2Adapter(dates, maxTemps, lowTemps, descriptors);
+                    setViewPager2Adapter(dates, maxTemps, lowTemps, descriptors, rainChance);
                 }
                 catch (JSONException e){
                     e.printStackTrace();
@@ -128,8 +132,8 @@ public class WeatherActivity extends BaseActivity {
 
 
     }
-    private void setViewPager2Adapter(List<String> dates, List<String> highs, List<String> lows, int descriptor []){
-        viewPager2.setAdapter(new ViewPagerAdapter(this, dates, highs,lows, descriptor, viewPager2));
+    private void setViewPager2Adapter(List<String> dates, List<String> highs, List<String> lows, int descriptor [], List<String> rainChance){
+        viewPager2.setAdapter(new ViewPagerAdapter(this, dates, highs,lows, descriptor, rainChance, viewPager2));
     }
 }
 
