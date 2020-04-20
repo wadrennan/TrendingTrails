@@ -40,7 +40,6 @@
         </activity>
         <activity android:name=".Weather.WeatherActivity" />
         <activity android:name=".Profile.ProfileActivity" />
-        <activity android:name=".Location.LocationsMenuActivity" />
         <activity android:name=".Weather.SelectCityActivity" />
         <activity android:name=".Map.MapActivity" />
         <activity android:name=".Review.SaveTrailActivity" />
