@@ -2,9 +2,9 @@ package com.example.trendingtrails.Map;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.RatingBar;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.example.trendingtrails.Data.Queries;
@@ -17,8 +17,9 @@ import java.sql.Connection;
 public class SaveTrailActivity extends MapActivity {
     private double distance;
     LocationTrack lt;
-    private Spinner ratingSpinner;
-    private Spinner intensitySpinner;
+    private RatingBar ratingValue;
+    private SeekBar intensityValue;
+    EditText name;
     private String encodedPoly;
     private double lat;
     private double lon;
@@ -34,25 +35,20 @@ public class SaveTrailActivity extends MapActivity {
         System.out.println("Distance = " + distance + "");
         lt = new LocationTrack(this);
         //fill spinners with values
-        ratingSpinner = (Spinner) findViewById(R.id.rating_spinner);
-        intensitySpinner = (Spinner) findViewById(R.id.intensity_spinner);
-        Integer[] elements = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        ArrayAdapter<Integer> ratingAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, elements);
-        final ArrayAdapter<Integer> intensityAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, elements);
-        ratingSpinner.setAdapter(ratingAdapter);
-        intensitySpinner.setAdapter(intensityAdapter);
-
+        ratingValue = findViewById(R.id.rating_spinner);
+        intensityValue = findViewById(R.id.intensity_spinner);
+        name = findViewById(R.id.name_field);
 
         findViewById(R.id.submit_button).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (intensitySpinner.getSelectedItem() != null && ratingSpinner.getSelectedItem() != null) {
+                if (!name.getText().toString().trim().isEmpty()) {
                     System.out.println("Submit Clicked");
-                    Toast.makeText(getApplicationContext(), "Submit Successful", Toast.LENGTH_SHORT).show();
                     postToDatabase();
+                    Toast.makeText(getApplicationContext(), "Submit Successful", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     System.out.println("Selection Not detected!");
-                    Toast.makeText(getApplicationContext(), "Submission unsuccessful. Try again", Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Submission unsuccessful.\nPlease enter a name", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -67,6 +63,6 @@ public class SaveTrailActivity extends MapActivity {
         //Fixed to take start point not endpoints
         //double lat = lt.getLatitude();
         //double lng = lt.getLongitude();
-        Queries.insertNewTrail(conn, name, lat, lon, distance, encodedPoly, (int) ratingSpinner.getSelectedItem(), (int) intensitySpinner.getSelectedItem(), comments);
+        Queries.insertNewTrail(conn, name, lat, lon, distance, encodedPoly, (int) (ratingValue.getRating()/ratingValue.getStepSize()), intensityValue.getProgress(), comments);
     }
 }

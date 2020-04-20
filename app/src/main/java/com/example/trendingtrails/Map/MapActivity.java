@@ -16,6 +16,7 @@ import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Database;
 import com.example.trendingtrails.Info.ReviewActivity;
+import com.example.trendingtrails.Info.TrailInfoActivity;
 import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Trail;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapActivity extends BaseActivity
-        implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+        implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
     private GoogleApiClient googleApiClient;
     LocationTrack lt;  //Location Service
     private double lat; //latitude
@@ -52,7 +53,6 @@ public class MapActivity extends BaseActivity
     public Trail trail;
     Polyline mPolyline;
     protected int trailId;
-    private boolean init = true;
 
 
     @Override
@@ -109,6 +109,12 @@ public class MapActivity extends BaseActivity
         mapFragment.getMapAsync(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new MapTasks().execute();
+    }
+
     /**
      * Manipulates the map when it's available.
      * The API invokes this callback when the map is ready to be used.
@@ -130,6 +136,7 @@ public class MapActivity extends BaseActivity
         googleMap.setMyLocationEnabled(true);
         googleMap.setOnMarkerClickListener(this);
         googleMap.setOnMapClickListener(this);
+        googleMap.setOnInfoWindowClickListener(this);
     }
 
     /**
@@ -159,8 +166,24 @@ public class MapActivity extends BaseActivity
     }
 
     @Override
+    public void onInfoWindowClick(Marker marker) {
+        int id = (int) marker.getTag();
+        Trail t = null;
+        for (Trail trail : trails) {
+            t = trail;
+            if (trail.id == id)
+                break;
+        }
+        Intent intent = new Intent(getApplicationContext(), TrailInfoActivity.class);
+        intent.putExtra("TRAIL_ID", t.id);
+        startActivity(intent);
+    }
+
+    @Override
     public void onMapClick(LatLng latLng) {
         findViewById(R.id.completed_trail).setVisibility(View.INVISIBLE);
+        if (mPolyline != null)
+            mPolyline.remove();
     }
 
     protected void onDestroy() {
