@@ -14,13 +14,14 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Data.Queries;
-import com.example.trendingtrails.Database;
-import com.example.trendingtrails.Info.ReviewActivity;
+import com.example.trendingtrails.Data.Database;
+import com.example.trendingtrails.Review.ReviewActivity;
 import com.example.trendingtrails.Info.TrailInfoActivity;
 import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
+import com.example.trendingtrails.Review.SaveTrailActivity;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,8 +35,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 

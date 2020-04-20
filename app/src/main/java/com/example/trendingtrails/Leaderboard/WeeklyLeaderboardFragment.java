@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.trendingtrails.Data.Queries;
-import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Models.Leader;
 import com.example.trendingtrails.R;
 

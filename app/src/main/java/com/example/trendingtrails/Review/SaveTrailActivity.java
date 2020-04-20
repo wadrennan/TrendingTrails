@@ -1,4 +1,4 @@
-package com.example.trendingtrails.Map;
+package com.example.trendingtrails.Review;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,8 +8,9 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.example.trendingtrails.Data.Queries;
-import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Location.LocationTrack;
+import com.example.trendingtrails.Map.MapActivity;
 import com.example.trendingtrails.R;
 
 import java.sql.Connection;

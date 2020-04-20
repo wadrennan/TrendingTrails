@@ -3,10 +3,7 @@ package com.example.trendingtrails.Weather;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +16,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Data.Queries;
-import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Location.LocationTrack;
 import com.example.trendingtrails.Models.Location;
 import com.example.trendingtrails.R;
@@ -30,7 +27,6 @@ import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 

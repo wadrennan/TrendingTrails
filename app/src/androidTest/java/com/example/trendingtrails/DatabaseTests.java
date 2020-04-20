@@ -1,5 +1,6 @@
 package com.example.trendingtrails;
 
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Models.User;
 
 import org.junit.After;

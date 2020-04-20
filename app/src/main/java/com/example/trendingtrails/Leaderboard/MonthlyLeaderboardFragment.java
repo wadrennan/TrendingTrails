@@ -1,7 +1,5 @@
 package com.example.trendingtrails.Leaderboard;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -14,11 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.trendingtrails.Data.Queries;
-import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Models.Leader;
 import com.example.trendingtrails.R;
 

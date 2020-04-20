@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.example.trendingtrails.Data.Queries;
-import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Info.TrailInfoActivity;
 import com.example.trendingtrails.Models.AddedTrail;
 import com.example.trendingtrails.R;

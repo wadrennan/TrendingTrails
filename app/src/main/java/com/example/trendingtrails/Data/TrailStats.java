@@ -1,8 +1,5 @@
 package com.example.trendingtrails.Data;
 
-import com.example.trendingtrails.Database;
-import com.example.trendingtrails.Models.Global;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;

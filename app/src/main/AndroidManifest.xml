@@ -43,11 +43,10 @@
         <activity android:name=".Location.LocationsMenuActivity" />
         <activity android:name=".Weather.SelectCityActivity" />
         <activity android:name=".Map.MapActivity" />
-        <activity android:name=".Map.SaveTrailActivity" />
-        <activity android:name=".Map.MapMenuActivity" />
-        <activity android:name=".Map.TrailsNearMeActivity" />
+        <activity android:name=".Review.SaveTrailActivity" />
+        <activity android:name=".Trails.TrailsActivity" />
         <activity android:name=".Map.MapExistingTrailActivity" />
-        <activity android:name=".Info.ReviewActivity" />
+        <activity android:name=".Review.ReviewActivity" />
         <activity android:name=".Weather.WeatherMenuActivity"></activity>
     </application>
 

@@ -1,4 +1,4 @@
-package com.example.trendingtrails;
+package com.example.trendingtrails.Data;
 
 import android.annotation.SuppressLint;
 import android.os.StrictMode;

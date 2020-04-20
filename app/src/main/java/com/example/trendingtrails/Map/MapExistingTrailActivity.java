@@ -7,14 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.trendingtrails.BaseActivity;
-import com.example.trendingtrails.Database;
-import com.example.trendingtrails.Info.ReviewActivity;
-import com.example.trendingtrails.Location.LocationsMenuActivity;
-import com.example.trendingtrails.Models.Global;
-import com.example.trendingtrails.Models.Trail;
+import com.example.trendingtrails.Data.Database;
+import com.example.trendingtrails.Review.ReviewActivity;
 import com.example.trendingtrails.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,7 +18,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 
@@ -30,7 +25,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MapExistingTrailActivity extends BaseActivity implements OnMapReadyCallback {

@@ -241,11 +241,14 @@ public class Queries {
         }
     }
 
-    public static List<Trail> getPopularTrails(Connection conn) throws SQLException {
-        String query = "SELECT trail_id, name, distance FROM AllTrails t " +
+    public static List<Trail> getPopularTrails(Connection conn, double latRad, double lonRad, String op, double dist) throws SQLException {
+        String query = "SELECT trail_id, name, distance, lat, long FROM AllTrails t " +
                 " JOIN CompletedTrails ct " +
-                "ON ct.TrailId = t.trail_id " +
-                "GROUP BY trail_id, name, distance " +
+                " ON ct.TrailId = t.trail_id " +
+                " where acos(sin(" + latRad + ") " +
+                " * sin(RADIANS(lat)) + cos(" + latRad + ") * cos(RADIANS(lat)) * cos(RADIANS(long) - (" + lonRad + "))) " +
+                " * 6371 " + op + " " + dist + "" +
+                "GROUP BY trail_id, name, distance, lat, long " +
                 "HAVING AVG(rating) > 6";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
@@ -253,16 +256,17 @@ public class Queries {
         rs.next();
         int id;
         String name;
-        double dist;
-        while(!rs.isAfterLast()){
+        double distance;
+        while (!rs.isAfterLast()) {
             id = rs.getInt("trail_id");
-            name =  rs.getString("name");
-            dist = rs.getDouble("distance");
-            //Truncate the decimal value
+            name = rs.getString("name");
+            distance = rs.getDouble("distance");
+            double latitude = rs.getDouble("lat");
+            double longitude = rs.getDouble("long");
             BigDecimal truncatedDist = new BigDecimal(Double.toString(dist));
             truncatedDist = truncatedDist.setScale(2, RoundingMode.HALF_UP);
             dist = truncatedDist.doubleValue();
-            Trail t = new Trail(id, name,dist);
+            Trail t = new Trail(id, name, distance, latitude, longitude);
             trailList.add(t);
             rs.next();
         }
@@ -305,7 +309,9 @@ public class Queries {
     }
 
     public static List<Trail> getNearbyTrails(Connection conn, double latRad, double lonRad, String op, double dist) throws SQLException {
-        String query = "SELECT trail_id, name, distance, lat, long FROM AllTrails where acos(sin(" + latRad + ") * sin(RADIANS(lat)) + cos(" + latRad + ") * cos(RADIANS(lat)) * cos(RADIANS(long) - (" + lonRad + "))) * 6371 " + op + " " + dist + "";
+        String query = "SELECT trail_id, name, distance, lat, long FROM AllTrails where acos(sin(" + latRad + ") " +
+                " * sin(RADIANS(lat)) + cos(" + latRad + ") * cos(RADIANS(lat)) * cos(RADIANS(long) - (" + lonRad + "))) " +
+                " * 6371 " + op + " " + dist + "";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         List<Trail> trailList = new ArrayList<>();

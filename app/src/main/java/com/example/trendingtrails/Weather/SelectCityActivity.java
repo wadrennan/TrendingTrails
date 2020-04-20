@@ -6,8 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.example.trendingtrails.BaseActivity;
-import com.example.trendingtrails.Data.Queries;
-import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Models.Input;
 import com.example.trendingtrails.R;
 

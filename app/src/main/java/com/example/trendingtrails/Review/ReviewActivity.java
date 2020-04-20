@@ -1,18 +1,16 @@
-package com.example.trendingtrails.Info;
+package com.example.trendingtrails.Review;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.trendingtrails.BaseActivity;
 import com.example.trendingtrails.Data.Queries;
-import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.R;
 
 import java.sql.Connection;

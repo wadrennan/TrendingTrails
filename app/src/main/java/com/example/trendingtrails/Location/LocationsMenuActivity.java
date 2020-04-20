@@ -11,17 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.trendingtrails.BaseActivity;
-import com.example.trendingtrails.Database;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.R;
-import com.example.trendingtrails.Weather.SelectCityActivity;
 import com.example.trendingtrails.Weather.WeatherActivity;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
-import static com.example.trendingtrails.Models.Global.AccountInfo;
 
 
 public class LocationsMenuActivity extends BaseActivity {

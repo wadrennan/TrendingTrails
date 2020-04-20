@@ -7,12 +7,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.trendingtrails.Data.CircleTransform;
+import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Leaderboard.LeaderboardActivity;
-import com.example.trendingtrails.Location.LocationsMenuActivity;
 import com.example.trendingtrails.Map.MapActivity;
-import com.example.trendingtrails.Map.MapMenuActivity;
-import com.example.trendingtrails.Map.TrailsNearMeActivity;
+import com.example.trendingtrails.Trails.TrailsActivity;
 import com.example.trendingtrails.Models.Global;
 import com.example.trendingtrails.Models.User;
 import com.example.trendingtrails.Profile.ProfileActivity;
@@ -33,6 +33,7 @@ public class HomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        checkLocationPermissions();
         findViewById(R.id.weatherButton).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                         Intent activityIntent = new Intent(getBaseContext(), WeatherMenuActivity.class);
@@ -49,7 +50,7 @@ public class HomeActivity extends BaseActivity {
         findViewById(R.id.trailsNearMeButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent activityIntent = new Intent(getBaseContext(), TrailsNearMeActivity.class);
+                Intent activityIntent = new Intent(getBaseContext(), TrailsActivity.class);
                 startActivity(activityIntent);
             }
         });
