@@ -8,6 +8,7 @@ public class AddedTrail implements Serializable {
     public double distance;
     public int intensity;
     public int rating;
+    public String review;
 
     public AddedTrail(){
         name = null;
@@ -22,5 +23,14 @@ public class AddedTrail implements Serializable {
         this.distance = distance;
         this.intensity = intensity;
         this.rating = rating;
+    }
+
+    public AddedTrail(int id, String name, double distance, int intensity, int rating, String rev){
+        this.id = id;
+        this.name = name;
+        this.distance = distance;
+        this.intensity = intensity;
+        this.rating = rating;
+        review = rev;
     }
 }

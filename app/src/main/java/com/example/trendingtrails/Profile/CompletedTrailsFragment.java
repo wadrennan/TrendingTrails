@@ -73,24 +73,26 @@ public class CompletedTrailsFragment extends Fragment {
                 distance.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                 distance.setLayoutParams(textParams);
                 distance.setText("Distance: " + String.format("%.2f", trail.distance) + " miles");
-                TextView intensity = new TextView(getView().getContext());
-                intensity.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                intensity.setLayoutParams(textParams);
-                if (trail.intensity < 4) {
-                    intensity.setText("Easy");
-                } else if (trail.intensity < 8) {
-                    intensity.setText("Medium");
-                } else {
-                    intensity.setText("Hard");
-                }
-                TextView rating = new TextView(getView().getContext());
-                rating.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                rating.setLayoutParams(textParams);
-                rating.setText("Rating: " + Integer.toString(trail.rating));
                 ll.addView(name);
                 ll.addView(distance);
-                ll.addView(intensity);
-                ll.addView(rating);
+                if (trail.review != null) {
+                    TextView intensity = new TextView(getView().getContext());
+                    intensity.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                    intensity.setLayoutParams(textParams);
+                    if (trail.intensity < 4) {
+                        intensity.setText("Easy");
+                    } else if (trail.intensity < 8) {
+                        intensity.setText("Medium");
+                    } else {
+                        intensity.setText("Hard");
+                    }
+                    TextView rating = new TextView(getView().getContext());
+                    rating.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                    rating.setLayoutParams(textParams);
+                    rating.setText("Rating: " + Integer.toString(trail.rating));
+                    ll.addView(intensity);
+                    ll.addView(rating);
+                }
                 ll.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

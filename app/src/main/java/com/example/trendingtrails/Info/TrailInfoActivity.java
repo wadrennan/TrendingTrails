@@ -45,6 +45,7 @@ public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdap
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                 intent.putExtra("TRAIL_ID", id);
                 startActivity(intent);
+                finish();
             }
         });
     }

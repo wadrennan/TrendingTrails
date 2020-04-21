@@ -99,12 +99,14 @@ public class Queries {
     }
 
     public static List<AddedTrail> getAddedTrails(Connection conn) throws SQLException {
-        String query = "SELECT trail_id, name, ct.intensity, ct.rating, distance, lat, long FROM AllTrails t " +
+        String query = "SELECT (trail_id), name, AVG(ct.intensity) AS intensity, AVG(ct.rating) AS rating, distance, lat, long FROM AllTrails t " +
                 " JOIN AddedTrails added " +
                 " ON added.TrailId = t.trail_id " +
                 " JOIN CompletedTrails ct " +
                 " ON ct.TrailId = t.trail_id " +
-                " where added.email= '" + Global.AccountInfo.personEmail + "' ";
+                " where added.email= '" + Global.AccountInfo.personEmail + "' " +
+                " group by trail_id, name, distance, lat, long " +
+                " order by trail_id desc ";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         List<AddedTrail> trails = new ArrayList<>();
@@ -120,10 +122,11 @@ public class Queries {
     }
 
     public static List<AddedTrail> getCompletedTrails(Connection conn) throws SQLException {
-        String query = "SELECT trail_id, name, intensity, rating, distance, lat, long FROM AllTrails t " +
+        String query = "SELECT trail_id, name, intensity, rating, review, distance, lat, long FROM AllTrails t " +
                 " JOIN CompletedTrails ct " +
                 " ON ct.TrailId = t.trail_id " +
-                " where email= '" + Global.AccountInfo.personEmail + "' ";
+                " where email= '" + Global.AccountInfo.personEmail + "' " +
+                " order by date desc ";
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         List<AddedTrail> trails = new ArrayList<>();
@@ -132,8 +135,9 @@ public class Queries {
             String name = rs.getString("name");
             int intensity = rs.getInt("intensity");
             int rating = rs.getInt("rating");
+            String review = rs.getString("review");
             double distance = rs.getDouble("distance");
-            trails.add(new AddedTrail(id, name, distance, intensity, rating));
+            trails.add(new AddedTrail(id, name, distance, intensity, rating, review));
         }
         return trails;
     }

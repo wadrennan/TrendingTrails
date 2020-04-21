@@ -49,7 +49,7 @@ public class UserInfoFragment extends Fragment {
         options.add("");
         options.add("Beginner");
         options.add("Intermediate");
-        options.add("Advanced");
+        options.add("Experienced");
         dataAdapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_spinner_item, options);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);

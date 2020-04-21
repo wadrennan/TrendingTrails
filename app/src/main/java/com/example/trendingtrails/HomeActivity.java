@@ -93,7 +93,7 @@ public class HomeActivity extends BaseActivity {
                     rankStr += "Intermediate";
                     break;
                 case 3:
-                    rankStr += "Advanced";
+                    rankStr += "Experienced";
                     break;
             }
             rankTxt.setText(rankStr);
