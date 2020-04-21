@@ -1,5 +1,7 @@
 package com.example.trendingtrails.Data;
 
+import java.util.List;
+
 public class Math {
     public static double distance(double lat1, double lon1, double lat2, double lon2) {
         if ((lat1 == lat2) && (lon1 == lon2)) {
@@ -20,5 +22,13 @@ public class Math {
 
     public static double rad2deg(double rad) {
         return (rad * 180.0 / java.lang.Math.PI);
+    }
+
+    public static double average(List<Integer> values){
+        double sum = 0.0;
+        for (int value: values) {
+            sum += value;
+        }
+        return sum / values.size();
     }
 }

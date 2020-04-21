@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trendingtrails.BaseActivity;
+import com.example.trendingtrails.Data.Math;
 import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Map.MapActivity;
@@ -20,6 +21,7 @@ import com.example.trendingtrails.R;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdapter.OnCardClickListener {
@@ -63,8 +65,16 @@ public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdap
             TextView distance = findViewById(R.id.distanceTxt);
             name.setText(trail.name);
             distance.setText(String.format("%.2f", trail.distance) + " miles");
-            double rating = calculateRating(reviews);
-            double intensity = calculateIntensity(reviews);
+            List<Integer> ratings = new ArrayList<>();
+            for (Review r:reviews) {
+                ratings.add(r.rating);
+            }
+            double rating = Math.average(ratings);
+            List<Integer> intensities = new ArrayList<>();
+            for (Review r:reviews) {
+                intensities.add(r.intensity);
+            }
+            double intensity = Math.average(intensities);
             TextView ratingText = findViewById(R.id.ratingNumTxt);
             TextView intensityText = findViewById(R.id.intensityNumTxt);
             ratingText.setText(String.format("%.2f", rating) + "/10");
@@ -73,22 +83,6 @@ public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdap
             reviewCards.setAdapter(adapter);
             LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
             reviewCards.setLayoutManager(llm);
-        }
-
-        private double calculateIntensity(List<Review> trails) {
-            double sum = 0.0;
-            for (Review review : trails) {
-                sum += review.intensity;
-            }
-            return sum / trails.size();
-        }
-
-        private double calculateRating(List<Review> trails) {
-            double sum = 0.0;
-            for (Review review : trails) {
-                sum += review.rating;
-            }
-            return sum / trails.size();
         }
 
         @Override
