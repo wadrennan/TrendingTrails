@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.trendingtrails.BaseActivity;
-import com.example.trendingtrails.Data.Math;
+import com.example.trendingtrails.Data.MyMath;
 import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Map.MapActivity;
@@ -21,7 +21,6 @@ import com.example.trendingtrails.R;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdapter.OnCardClickListener {
@@ -69,12 +68,12 @@ public class TrailInfoActivity extends BaseActivity implements TrailInfoViewAdap
             for (Review r:reviews) {
                 ratings.add(r.rating);
             }
-            double rating = Math.average(ratings);
+            double rating = MyMath.average(ratings);
             List<Integer> intensities = new ArrayList<>();
             for (Review r:reviews) {
                 intensities.add(r.intensity);
             }
-            double intensity = Math.average(intensities);
+            double intensity = MyMath.average(intensities);
             TextView ratingText = findViewById(R.id.ratingNumTxt);
             TextView intensityText = findViewById(R.id.intensityNumTxt);
             ratingText.setText(String.format("%.2f", rating) + "/10");

@@ -21,7 +21,7 @@ import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Info.TrailInfoActivity;
 import com.example.trendingtrails.Location.LocationTrack;
-import com.example.trendingtrails.Data.Math;
+import com.example.trendingtrails.Data.MyMath;
 import com.example.trendingtrails.Models.Trail;
 import com.example.trendingtrails.R;
 
@@ -65,8 +65,8 @@ public class TrailsNearMeFragment extends Fragment implements TrailsViewAdapter.
             lon = lt.getLongitude();
         }
         System.out.println(lat + " " + lon);
-        latRad = Math.deg2rad(lat);
-        lonRad = Math.deg2rad(lon);
+        latRad = MyMath.deg2rad(lat);
+        lonRad = MyMath.deg2rad(lon);
         trailCards = (RecyclerView) getView().findViewById(R.id.recycler_view);
         conn = Database.connect();
         if (conn == null) {
@@ -112,7 +112,7 @@ public class TrailsNearMeFragment extends Fragment implements TrailsViewAdapter.
             if (trailList != null) {
                 super.onPostExecute(trailList);
                 for (Trail trail : trailList) {
-                    trail.distanceAway = Math.distance(lat, lon, trail.latitude, trail.longitude);
+                    trail.distanceAway = MyMath.distance(lat, lon, trail.latitude, trail.longitude);
                 }
                 trailList.sort(Trail.distaneComparator);
                 TrailsViewAdapter adapter = new TrailsViewAdapter(trailList, TrailsNearMeFragment.this);

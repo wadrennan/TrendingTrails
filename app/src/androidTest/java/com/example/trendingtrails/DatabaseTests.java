@@ -1,6 +1,7 @@
 package com.example.trendingtrails;
 
 import com.example.trendingtrails.Data.Database;
+import com.example.trendingtrails.Data.Queries;
 import com.example.trendingtrails.Models.User;
 
 import org.junit.After;
@@ -32,8 +33,8 @@ public class DatabaseTests {
     public void WriteAndReadDatabaseTest() throws Exception {
         String email = "johnsmith@test.com";
         User testUser = new User(email, "John Smith", 2);
-        Database.insertUser(connection, testUser);
-        User dbUser = Database.getUser(connection, email);
+        Queries.insertUser(connection, testUser);
+        User dbUser = Queries.getUser(connection, email);
         assertNotNull(dbUser);
         assertThat(dbUser.displayName, equalTo(testUser.displayName));
         assertThat(dbUser.email, equalTo(testUser.email));
@@ -46,9 +47,9 @@ public class DatabaseTests {
         String newName = "Jane Doe";
         int newRank = 1;
 
-        User testUser = Database.getUser(connection, email);
-        Database.updateUser(connection, newName, newRank, testUser);
-        testUser = Database.getUser(connection, testUser.email);
+        User testUser = Queries.getUser(connection, email);
+        Queries.updateUser(connection, newName, newRank, testUser);
+        testUser = Queries.getUser(connection, testUser.email);
         assertThat(testUser.displayName, equalTo(newName));
         assertThat(testUser.rank, equalTo(newRank));
     }

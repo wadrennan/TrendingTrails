@@ -2,7 +2,7 @@ package com.example.trendingtrails.Data;
 
 import java.util.List;
 
-public class Math {
+public class MyMath {
     public static double distance(double lat1, double lon1, double lat2, double lon2) {
         if ((lat1 == lat2) && (lon1 == lon2)) {
             return 0;
