@@ -16,7 +16,7 @@ public class TrailTests {
         trail1 = new Trail();
 
         //Constructor with parameters
-        trail2 = new Trail("Test Trail", 9, 10, 1.75);
+        trail2 = new Trail(1,"Test Trail",1.750);
     }
 
     @Test
@@ -32,8 +32,6 @@ public class TrailTests {
     @Test
     public void settingValuesTest(){
         assertEquals(trail2.name, "Test Trail");
-        assertEquals(trail2.intensity, 9);
-        assertEquals(trail2.rating, 10);
         assertEquals(trail2.distance, 1.75,.10);
     }
 
