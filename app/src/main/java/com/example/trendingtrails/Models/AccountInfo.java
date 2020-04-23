@@ -20,4 +20,8 @@ public class AccountInfo {
          personId = account.getId();
          personPhoto = account.getPhotoUrl();
     }
+
+    public AccountInfo(String email){
+        personEmail = email;
+    }
 }

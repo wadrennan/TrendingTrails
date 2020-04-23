@@ -172,6 +172,21 @@ public class Queries {
         return zipList;
     }
 
+    public static Location getLocation(Connection conn, String zip) throws SQLException {
+        String query = "SELECT code, lat, lon, LocationName FROM ZipCodes WHERE code='"+ zip +"';";
+        System.out.println(query);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if(rs.next()){
+            String z = rs.getString("LocationName");
+            String code = rs.getString("code");
+            double lat = rs.getDouble("lat");
+            double lon = rs.getDouble("lon");
+            return new Location(code, lat, lon, z);
+        }
+        return null;
+    }
+
     public static List<Location> getLocations(Connection conn) throws SQLException {
         String query = "SELECT code, lat, lon, LocationName FROM ZipCodes WHERE email='"+ Global.AccountInfo.personEmail+"';";
         System.out.println(query);

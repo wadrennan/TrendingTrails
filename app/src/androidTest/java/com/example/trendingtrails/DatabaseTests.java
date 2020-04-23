@@ -2,6 +2,9 @@ package com.example.trendingtrails;
 
 import com.example.trendingtrails.Data.Database;
 import com.example.trendingtrails.Data.Queries;
+import com.example.trendingtrails.Models.AccountInfo;
+import com.example.trendingtrails.Models.Global;
+import com.example.trendingtrails.Models.Location;
 import com.example.trendingtrails.Models.User;
 
 import org.junit.After;
@@ -10,16 +13,21 @@ import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class DatabaseTests {
     Connection connection;
+    String email = "example@example.com";
 
     @Before
     public void setUp() throws Exception {
+        Global.AccountInfo = new AccountInfo(email);
         connection = Database.connect();
         connection.setAutoCommit(false);
     }
@@ -27,6 +35,25 @@ public class DatabaseTests {
     @After
     public void closeDb() throws SQLException {
         connection.rollback();
+    }
+
+    @Test
+    public void WriteAndDeleteDatabaseTest() throws Exception{
+        User testUser = new User(email, "John Smith", 2);
+        Queries.insertUser(connection, testUser);
+        String zip = "12345";
+        double lat = 100.0;
+        double lng = 100.0;
+        String name = "Tuscaloosa, AL";
+        Queries.insertLocation(connection, zip, lat, lng, name);
+        Location l = Queries.getLocation(connection, zip);
+        assertEquals(l.zipCode, zip);
+        assertEquals(l.latitude, lat, .01);
+        assertEquals(l.longitude, lng, .01);
+        assertEquals(l.locationName, name);
+        Queries.deleteZipCode(connection, zip);
+        l = Queries.getLocation(connection, zip);
+        assertNull(l);
     }
 
     @Test
